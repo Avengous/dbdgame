@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var playerController = require('./server/controllers/Player');
+var playerController = require('./server/controllers/player');
 var pm = playerController.playerManager;
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
