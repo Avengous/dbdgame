@@ -1,5 +1,5 @@
 {
-  "name": "basic-mmo-phaser",
+  "name": "dbdgame",
   "version": "1.0.0",
   "description": " Very basic multiplayer online game example made with Phaser, Node.js and Socket.io ",
   "main": "server.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Jerenaux/basic-mmo-phaser.git"
+    "url": "git+https://github.com/Avengous/dbdgame.git"
   },
   "keywords": [
     "Phaser",
@@ -18,12 +18,12 @@
     "Node.js",
     "socket.io"
   ],
-  "author": "Jerome Renaux",
+  "author": "Giovanni Schuoler",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Jerenaux/basic-mmo-phaser/issues"
+    "url": "https://github.com/Avengous/dbdgame/issues"
   },
-  "homepage": "https://github.com/Jerenaux/basic-mmo-phaser#readme",
+  "homepage": "https://github.com/Avengous/dbdgame#readme",
   "dependencies": {
     "express": "^4.15.2",
     "socket.io": "^1.7.3"
