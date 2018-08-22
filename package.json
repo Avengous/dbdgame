@@ -1,7 +1,7 @@
 {
   "name": "dbdgame",
   "version": "1.0.0",
-  "description": " Very basic multiplayer online game example made with Phaser, Node.js and Socket.io ",
+  "description": " Very basic multiplayer online game example made with Phaser, Node.js and Socket.io",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,15 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/Avengous/dbdgame.git"
   },
-  "keywords": [
-    "Phaser",
-    "Multiplayer",
-    "game",
-    "Node.js",
-    "socket.io"
-  ],
   "author": "Giovanni Schuoler",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Avengous/dbdgame/issues"
   },
