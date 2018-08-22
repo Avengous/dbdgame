@@ -9,6 +9,11 @@ var playerStats;
 var playerui;
 const { SPACE, LEFT, RIGHT, UP, DOWN, Q, W, E, R } = Phaser.Input.Keyboard.KeyCodes;
 
+var buffered_movementData = {
+    'lastSent': new Date().getTime(), 
+    'movementData': []
+};
+
 Game.init = function(){
     game.stage.disableVisibilityChange = true;
 };
@@ -166,13 +171,19 @@ Game.update = function(time, delta) {
         // Moves other players on client
         var x = this.player.x;
         var y = this.player.y;
+        var currTime = new Date().getTime();
+        var timeDiff = currTime - buffered_movementData['lastSent'];
+        buffered_movementData['lastSent'] = currTime;
 
-        if (this.player.oldPosition && (x !== this.player.oldPosition.x || y !== this.player.oldPosition.y)) {
-            this.socket.emit('playerMovement', { x: this.player.x, y: this.player.y });
-        }
-        this.player.oldPosition = {
-            x: this.player.x,
-            y: this.player.y,
+        if (currTime==100) {
+            if (this.player.oldPosition && (x !== this.player.oldPosition.x || y !== this.player.oldPosition.y)) {
+                console.log('sending playerMovement event ', eventsSent);
+                this.socket.emit('playerMovement', { x: this.player.x, y: this.player.y });
+            }
+            this.player.oldPosition = {
+                x: this.player.x,
+                y: this.player.y,
+            }
         };
 
         // Player Left/Right/Idle Movement
