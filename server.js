@@ -73,7 +73,7 @@ io.on('connection', function (socket) {
 
 });
 
-server.listen(8082, function () {
+server.listen(port, function () {
   console.log(`Listening on ${server.address().port}`);
 });
 
