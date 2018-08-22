@@ -48,14 +48,15 @@ Game.create = function(){
     groundLayer = map.createStaticLayer('GroundLayer', tiles, 0, 0);
     map.createStaticLayer('Background', tiles,0,0);
 
-    // the player will collide with this layer
+    // Everything will collide with this layer
     groundLayer.setCollisionByExclusion([-1]);
- 
+    
     // set the boundaries of our game world
     this.matter.world.setBounds(0, 0, groundLayer.width, groundLayer.height);
 
     // set collision on groundLayer
     groundLayer.setCollisionByProperty({ collides: true });
+    console.log(groundLayer);
     world = this.matter.world.convertTilemapLayer(groundLayer, {'name': 'groundLayer'});
 
     this.otherPlayers =[];
@@ -71,9 +72,7 @@ Game.create = function(){
     this.anims.create(config_000);
 
     var boom = this.matter.add.sprite(200, 600, '000', 0, {'inertia': 'Infinity', 'name':'trainingDummy'}); // change to matterjs eventually
-    //boom.setStatic(true);
-    boom.setMass(Infinity);
-    console.log(boom);
+    boom.body.collisionFilter.group = -1;
     boom.anims.play('000_walk');
 
     // End Test Monster
@@ -235,6 +234,7 @@ function addPlayer(self, playerInfo) {
          'name': 'playerSprite'
         }
     );
+    self.player.body.collisionFilter.group = -1;
     return self.player;
 };
 
@@ -248,6 +248,7 @@ function addOtherPlayers(self, playerInfo) {
         {'inertia': 'Infinity', 'name': 'playerSprite'}
     );
     otherPlayer.playerId = playerInfo.playerId;
+    otherPlayer.body.collisionFilter.group = -1;
     self.otherPlayers.push(otherPlayer);
 };
 
