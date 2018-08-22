@@ -1,8 +1,5 @@
-var port = Number(process.env.PORT || 8080);
 var express = require('express');
 var app = express();
-    //.use((req, res) => res.sendFile(INDEX) )
-    //.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 var playerController = require('./server/controllers/Player');
 var pm = playerController.playerManager;
 var server = require('http').Server(app);
@@ -73,7 +70,7 @@ io.on('connection', function (socket) {
 
 });
 
-server.listen(port, function () {
+server.listen(process.env.PORT || 8080, function () {
   console.log(`Listening on ${server.address().port}`);
 });
 
