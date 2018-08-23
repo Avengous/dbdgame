@@ -136,7 +136,7 @@ Game.create = function(){
     });
 
     this.matter.world.on('collisionstart', function (event) {
-        if ((event.pairs[0].bodyB.name == 'playerSprite') && (event.pairs[0].bodyA.name == 'groundLayer' || event.pairs[0].bodyA.name == 'playerSprite')) {
+        if ((event.pairs[0].bodyB.name == 'playerSprite') && (event.pairs[0].bodyA.name == 'groundLayer')) {
             onGround = true;
         }
     });
