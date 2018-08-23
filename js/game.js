@@ -90,13 +90,13 @@ Game.create = function(){
 
     // End Test Monster
 
+    // Adds current player and other previously connected players to game on connect
     this.socket.on('currentPlayers', function (players) {
         Object.keys(players).forEach(function (id) {
             if (players[id].playerId === self.socket.id) {
                 player = addPlayer(self, players[id]);
                 playerStats = setPlayerStats(players[id]);
                 playerUi = createPlayerStatUI(self, players[id]);
-                // Set camera to follow player
                 self.cameras.main.startFollow(player);
                 //self.cameras.main.setDeadzone(50, 500);
                 //self.cameras.main.setBounds(500,500);
@@ -106,10 +106,12 @@ Game.create = function(){
         });
     });
 
+    // Add new players to game
     this.socket.on('newPlayer', function (playerInfo) {
         addOtherPlayers(self, playerInfo);
     });
 
+    // Remove player from game on disconnect
     this.socket.on('disconnect', function (playerId) {
         for (var i=0; i < self.otherPlayers.length; i++) {
             otherPlayer = self.otherPlayers[i];
@@ -119,6 +121,7 @@ Game.create = function(){
         };
     });
 
+    // Listens for player animation change events.
     this.socket.on('playerAnimationChangeEvent', function (playerInfo) {
         for (var i=0; i < self.otherPlayers.length; i++) {
             otherPlayer = self.otherPlayers[i];
@@ -131,6 +134,7 @@ Game.create = function(){
         };
     });
 
+    // Ground player if they are on the groundLayer
     this.matter.world.on('collisionstart', function (event) {
         if ((event.pairs[0].bodyB.name == 'playerSprite') && (event.pairs[0].bodyA.name == 'groundLayer')) {
             onGround = true;
@@ -251,6 +255,7 @@ Game.update = function(time, delta) {
 
     if (this.monsters) {
         for (var i=0; i<this.monsters.length; i++) {
+            // Update position of monster health bar
             this.monsters[i].hp.setPosition(this.monsters[i].x-(this.monsters[i].width*0.5), this.monsters[i].y-(this.monsters[i].height*0.70));
         }
     }
@@ -269,10 +274,6 @@ function addPlayer(self, playerInfo) {
         }
     );
     self.player.body.collisionFilter.group = -1;
-
-    //var hx = (this.color === 'blue') ? 110 : -40;
-    //self.player.hp = new HealthBar(self, 400 - hx, 300 - 110);
-
     return self.player;
 };
 
