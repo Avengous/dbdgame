@@ -218,9 +218,9 @@ Game.update = function(time, delta) {
                 standing = true;
             }
         }
-        
+
         // Player Jump Movement
-        if (cursors.space.isDown && onGround && !cursors.down.isDown) {
+        if (Phaser.Input.Keyboard.JustDown(cursors.space) && onGround && !cursors.down.isDown) {
             onGround = false;
             standing = false;
             this.player.setVelocityY(-10);
