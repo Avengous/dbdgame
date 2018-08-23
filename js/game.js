@@ -14,6 +14,8 @@ var buffered_movementData = {
     'movementData': []
 };
 
+var queuedMovementEvents = {};
+
 Game.init = function(){
     game.stage.disableVisibilityChange = true;
 };
@@ -111,6 +113,7 @@ Game.create = function(){
         };
     });
 
+    /*
     this.socket.on('playerMoved', function (playerInfo) {
         for (var i=0; i < self.otherPlayers.length; i++) {
             otherPlayer = self.otherPlayers[i];
@@ -118,7 +121,7 @@ Game.create = function(){
                 otherPlayer.setPosition(playerInfo.x, playerInfo.y);
             };
         };
-    });
+    });*/
 
     this.socket.on('playerAnimationChangeEvent', function (playerInfo) {
         for (var i=0; i < self.otherPlayers.length; i++) {
@@ -138,11 +141,19 @@ Game.create = function(){
         }
     });
 
+    // Listens for other player movement events from server and moves them on client.
     this.socket.on('playerMoved', function (playerInfo) {
         for (var i=0; i < self.otherPlayers.length; i++) {
             otherPlayer = self.otherPlayers[i];
             if (otherPlayer.playerId === playerInfo.playerId) {
-                otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+                // This will only move players if the previous movements have been completed. Will this lock it?
+                // Next step will add a time check where it will force sync the players if too much time has elapsed.
+                if (queuedMovementEvents[otherPlayer.playerId].length == 0) {
+                    for (var i=0; i < playerInfo.movementData.length; i++) {
+                        queuedMovementEvents[otherPlayer.playerId].push(playerInfo.movementData[i]);
+                    };
+                    moveOtherPlayer(otherPlayer);
+                }
             };
         };
     });
@@ -168,22 +179,27 @@ Game.create = function(){
 
 Game.update = function(time, delta) {
     if (this.player) {
-        // Moves other players on client
+        // Sends player movement to server.
         var x = this.player.x;
         var y = this.player.y;
+
         var currTime = new Date().getTime();
         var timeDiff = currTime - buffered_movementData['lastSent'];
-        buffered_movementData['lastSent'] = currTime;
 
-        if (currTime==100) {
-            if (this.player.oldPosition && (x !== this.player.oldPosition.x || y !== this.player.oldPosition.y)) {
-                console.log('sending playerMovement event ', eventsSent);
-                this.socket.emit('playerMovement', { x: this.player.x, y: this.player.y });
+        if (this.player.oldPosition && (x !== this.player.oldPosition.x || y !== this.player.oldPosition.y)) {
+            buffered_movementData['movementData'].push({ x: this.player.x, y: this.player.y, t: new Date().getTime()})
+
+            // Send movementData every 100ms
+            if (true) {
+                buffered_movementData['lastSent'] = currTime;
+                this.socket.emit('playerMovement', buffered_movementData['movementData']);
+                buffered_movementData['movementData'] = [];
             }
-            this.player.oldPosition = {
-                x: this.player.x,
-                y: this.player.y,
-            }
+        }
+
+        this.player.oldPosition = {
+            x: this.player.x,
+            y: this.player.y,
         };
 
         // Player Left/Right/Idle Movement
@@ -238,7 +254,8 @@ Game.update = function(time, delta) {
 function addPlayer(self, playerInfo) {
     playerCharacter = playerInfo.character;
     self.player = self.matter.add.sprite(
-        playerInfo.x, playerInfo.y, 
+        400,
+        300, 
         playerInfo.character + '_stand1_0', 
         0, 
         {'inertia': 'Infinity',
@@ -252,14 +269,15 @@ function addPlayer(self, playerInfo) {
 // Add Other Player's Sprites
 function addOtherPlayers(self, playerInfo) {
     const otherPlayer = self.matter.add.sprite(
-        playerInfo.x, 
-        playerInfo.y, 
+        400,
+        300, 
         playerInfo.character + '_stand1_0', 
         0, 
         {'inertia': 'Infinity', 'name': 'playerSprite'}
     );
     otherPlayer.playerId = playerInfo.playerId;
     otherPlayer.body.collisionFilter.group = -1;
+    queuedMovementEvents[playerInfo.playerId] = [];
     self.otherPlayers.push(otherPlayer);
 };
 
@@ -274,6 +292,15 @@ function createSpriteAnimations(self, json) {
         getFramesFromArray(self, keys.sort());
     }
 };
+
+function moveOtherPlayer(player) {
+    var events = queuedMovementEvents[player.playerId];
+    for (var i=0; i < events.length; i++) {
+        //player.setPosition(events[i].x, events[i].y);
+    };
+    player.setPosition(events[0].x, events[0].y);
+    queuedMovementEvents[player.playerId] = [];
+}
 
 function randomInt (low, high) {
     return Math.floor(Math.random() * (high - low) + low);
