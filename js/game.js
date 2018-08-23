@@ -67,8 +67,10 @@ Game.create = function(){
     world = this.matter.world.convertTilemapLayer(groundLayer, {'name': 'groundLayer'});
 
     this.otherPlayers =[];
+    this.monsters = [];
 
     // Test Monster
+
     var config_000 = {
         key: '000_walk',
         frames: this.anims.generateFrameNumbers('000', { start: 0, end: 6, first: 0 }),
@@ -81,6 +83,10 @@ Game.create = function(){
     var boom = this.matter.add.sprite(200, 600, '000', 0, {'inertia': 'Infinity', 'name':'trainingDummy'}); // change to matterjs eventually
     boom.body.collisionFilter.group = -1;
     boom.anims.play('000_walk');
+
+    boom.hp = new HealthBar(self, 0, 0);
+    boom.hp.setPosition(boom.x-(boom.width), boom.y-(boom.height));
+    this.monsters.push(boom);
 
     // End Test Monster
 
@@ -112,16 +118,6 @@ Game.create = function(){
             };
         };
     });
-
-    /*
-    this.socket.on('playerMoved', function (playerInfo) {
-        for (var i=0; i < self.otherPlayers.length; i++) {
-            otherPlayer = self.otherPlayers[i];
-            if (otherPlayer.playerId === playerInfo.playerId) {
-                otherPlayer.setPosition(playerInfo.x, playerInfo.y);
-            };
-        };
-    });*/
 
     this.socket.on('playerAnimationChangeEvent', function (playerInfo) {
         for (var i=0; i < self.otherPlayers.length; i++) {
@@ -175,6 +171,7 @@ Game.create = function(){
 
     // set bounds so the camera won't go outside the game world
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
 };
 
 Game.update = function(time, delta) {
@@ -189,7 +186,10 @@ Game.update = function(time, delta) {
         if (this.player.oldPosition && (x !== this.player.oldPosition.x || y !== this.player.oldPosition.y)) {
             buffered_movementData['movementData'].push({ x: this.player.x, y: this.player.y, t: new Date().getTime()})
 
-            // Send movementData every 100ms
+            //this.player.hp.setPosition(x-(this.player.width), y-(this.player.height));
+
+            // Send movementData every 100ms (timeDiff == 100)
+            // I removed the delay. In order to interpolate I would need to interprete velocity.
             if (true) {
                 buffered_movementData['lastSent'] = currTime;
                 this.socket.emit('playerMovement', buffered_movementData['movementData']);
@@ -248,6 +248,12 @@ Game.update = function(time, delta) {
             }
         }
     }
+
+    if (this.monsters) {
+        for (var i=0; i<this.monsters.length; i++) {
+            this.monsters[i].hp.setPosition(this.monsters[i].x-(this.monsters[i].width*0.5), this.monsters[i].y-(this.monsters[i].height*0.70));
+        }
+    }
 };
 
 // Add Player's Character
@@ -263,6 +269,10 @@ function addPlayer(self, playerInfo) {
         }
     );
     self.player.body.collisionFilter.group = -1;
+
+    //var hx = (this.color === 'blue') ? 110 : -40;
+    //self.player.hp = new HealthBar(self, 400 - hx, 300 - 110);
+
     return self.player;
 };
 
@@ -296,9 +306,8 @@ function createSpriteAnimations(self, json) {
 function moveOtherPlayer(player) {
     var events = queuedMovementEvents[player.playerId];
     for (var i=0; i < events.length; i++) {
-        //player.setPosition(events[i].x, events[i].y);
+        player.setPosition(events[i].x, events[i].y);
     };
-    player.setPosition(events[0].x, events[0].y);
     queuedMovementEvents[player.playerId] = [];
 }
 
