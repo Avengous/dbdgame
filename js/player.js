@@ -22,3 +22,34 @@ function setPlayerStats(player) {
 	return stats;
 };
 
+class Ability {
+
+	constructor(game) {
+		this.game = game;
+		this.player = game.player;
+		this.x = this.player.x;
+	}
+
+	basicAttack() {
+		console.log();
+		var offsetX = this.player.flipX ? (40) : -1*(40);
+		var m = new Minion(this.game, this.player.x + offsetX, this.player.y);
+		playerPunch(this.game, playerCharacter);
+
+		this.player.once('animationupdate', function(animation, frame) {
+			if (frame.isLast) {
+				m.circle();
+			};
+		}, m);
+
+		this.player.once('animationcomplete', function() {
+			m.destroy();
+		}, m);
+	}
+
+		/*
+		var timedEvent = this.game.time.delayedCall(200, function() {
+			m.destroy();
+		} , [], this);
+		*/
+}

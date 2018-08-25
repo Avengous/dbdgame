@@ -12,7 +12,7 @@ var config = {
 	        debug: false
 	    },
         matter: {
-            debug: false,
+            debug: true,
             gravity: { y: 1.5 }
         }
 	},

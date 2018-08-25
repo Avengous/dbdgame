@@ -1,7 +1,6 @@
 class HealthBar {
 
-    constructor (scene, x, y)
-    {
+    constructor (scene, x, y) {
         this.bar = new Phaser.GameObjects.Graphics(scene);
 
         this.x = x;
@@ -14,8 +13,7 @@ class HealthBar {
         scene.add.existing(this.bar);
     }
 
-    decrease (amount)
-    {
+    decrease (amount) {
         this.value -= amount;
 
         if (this.value < 0)
@@ -28,8 +26,7 @@ class HealthBar {
         return (this.value === 0);
     }
 
-    draw ()
-    {
+    draw () {
         this.bar.clear();
 
         //  BG
@@ -61,4 +58,29 @@ class HealthBar {
         this.draw();
     }
 
+}
+
+function getAllMethods(object) {
+    return Object.getOwnPropertyNames(object).filter(function(property) {
+        return typeof object[property] == 'function';
+    });
+}
+
+class Minion {
+    constructor (game, x, y) {
+        this.game = game;
+        this.x = x;
+        this.y = y;
+    }
+
+    circle(r=8) {
+        this.body = this.game.matter.add.circle(this.x, this.y, r);
+        this.body.collisionFilter.group = -1;
+        this.body.ignoreGravity = true;
+        this.body.inertia = 'Infinity';
+    }
+
+    destroy() {
+        this.game.matter.world.remove(this.body);
+    }
 }

@@ -63,7 +63,7 @@ Game.create = function(){
 
     // set collision on groundLayer
     groundLayer.setCollisionByProperty({ collides: true });
-    console.log(groundLayer);
+
     world = this.matter.world.convertTilemapLayer(groundLayer, {'name': 'groundLayer'});
 
     this.otherPlayers =[];
@@ -98,6 +98,7 @@ Game.create = function(){
                 playerStats = setPlayerStats(players[id]);
                 playerUi = createPlayerStatUI(self, players[id]);
                 self.cameras.main.startFollow(player);
+                console.log(player);
                 //self.cameras.main.setDeadzone(50, 500);
                 //self.cameras.main.setBounds(500,500);
             } else {
@@ -244,11 +245,12 @@ Game.update = function(time, delta) {
         }
 
         // Basic Attack
-        if (cursors.q.isDown) {
+        if (cursors.q.isDown && !ANIMATION_LOCK) {
             if (cursors.down.isDown) {
                 playerProneStab(this, playerCharacter);
             } else {
-                playerPunch(this, playerCharacter);
+                //playerPunch(this, playerCharacter);
+                new Ability(this).basicAttack();
             }
         }
     }
