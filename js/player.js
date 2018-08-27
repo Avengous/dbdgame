@@ -28,10 +28,10 @@ class Ability {
 		this.game = game;
 		this.player = game.player;
 		this.x = this.player.x;
+		this.object = new Phaser.GameObjects.GameObject(game, 'AbilityObject');
 	}
 
 	basicAttack() {
-		console.log();
 		var offsetX = this.player.flipX ? (40) : -1*(40);
 		var m = new Minion(this.game, this.player.x + offsetX, this.player.y);
 		playerPunch(this.game, playerCharacter);
@@ -45,6 +45,7 @@ class Ability {
 		this.player.once('animationcomplete', function() {
 			m.destroy();
 		}, m);
+		return this.object;
 	}
 
 		/*

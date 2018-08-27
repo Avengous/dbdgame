@@ -75,7 +75,8 @@ class Minion {
 
     circle(r=8) {
         this.body = this.game.matter.add.circle(this.x, this.y, r);
-        this.body.collisionFilter.group = -1;
+        //this.body.collisionFilter.group = -1;
+        this.body.name = 'minionBody'
         this.body.ignoreGravity = true;
         this.body.inertia = 'Infinity';
     }

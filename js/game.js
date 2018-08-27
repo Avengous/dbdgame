@@ -39,11 +39,21 @@ Game.preload = function() {
 
     this.load.tilemapTiledJSON('map', 'assets/json/icyfield.json');
     this.load.image('floor', 'assets/world/icyfield.png');
+
+    this.load.audio('bgm', ['assets/sfx/bgm.m4a']);
 };
 
 Game.create = function(){
     var self = this;
     this.socket = io();
+
+    var bgm = this.sound.add('bgm');
+    bgm.pauseOnBlur = false;
+    bgm.play();
+
+    bgm.on('ended', function() {
+        bgm.play();
+    });
 
     map = this.add.tilemap('map');
     //var map = this.make.tilemap({ key: 'map' });
@@ -82,6 +92,7 @@ Game.create = function(){
 
     var boom = this.matter.add.sprite(200, 600, '000', 0, {'inertia': 'Infinity', 'name':'trainingDummy'}); // change to matterjs eventually
     boom.body.collisionFilter.group = -1;
+    boom.body.name = 'monsterBody';
     boom.anims.play('000_walk');
 
     boom.hp = new HealthBar(self, 0, 0);
@@ -135,10 +146,19 @@ Game.create = function(){
         };
     });
 
-    // Ground player if they are on the groundLayer
     this.matter.world.on('collisionstart', function (event) {
-        if ((event.pairs[0].bodyB.name == 'playerSprite') && (event.pairs[0].bodyA.name == 'groundLayer')) {
+        var bodyA = event.pairs[0].bodyA;
+        var bodyB = event.pairs[0].bodyB;
+        var bodyNames = [bodyA.name, bodyB.name];
+
+        // Checks player against ground
+        if (bodyNames.includes('playerSprite'), bodyNames.includes('groundLayer')) {
             onGround = true;
+        }
+
+        // Checks minion vs monsters
+        if (bodyNames.includes('minionBody') && bodyNames.includes('monsterBody')) {
+
         }
     });
 
@@ -249,8 +269,11 @@ Game.update = function(time, delta) {
             if (cursors.down.isDown) {
                 playerProneStab(this, playerCharacter);
             } else {
-                //playerPunch(this, playerCharacter);
-                new Ability(this).basicAttack();
+                var playerAbility = new Ability(this).basicAttack();
+                playerAbility.on('testAbility', function(abilityObject) {
+                    console.log('success')
+                });
+                playerAbility.emit('testAbility', playerAbility);
             }
         }
     }
