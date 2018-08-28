@@ -1,31 +1,22 @@
-function spawnMonster(world, monster, x, y) {
-
+function createMonsterAnimations(game) {
+	var monsterData = game.cache.json.get('monsterData');
+	game.socket.on('monsterSpawnedEvent', spawnMonster());
 }
 
-function createMonsterAnimations() {
+function spawnMonster(game, monster, x, y) {
 
 }
-
-class MonsterAnimation {
-
-}
-
-
-// Will have a listener on client to listen for "spawnedMonsterEvent" which will emit the monster ID.
 
 class Monster {
 
 	constructor() {
-		// in preload()
-		//this.load.json('levelData', 'assets/level.json');
 
-
-		// in create()
-		//let data = this.cache.json.get('levelData');
 		
 	}
+}
 
-	basicAttack() {
+class MonsterAnimation {
 
-	}
+	
+
 }

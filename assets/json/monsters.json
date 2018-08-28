@@ -10,6 +10,28 @@
          "frameWidth":90,
          "frameHeight":100,
          "margin":4
+      },
+      "animation":{
+         "stand": {
+            "frames": { "start": 0, "end": 6, "first": 0 },
+            "frameRate": 1.5,
+            "repeat" : -1
+         },
+         "walk" :{
+            "frames": { "start": 0, "end": 6, "first": 0 },
+            "frameRate": 1.5,
+            "repeat" : -1
+         },
+         "hit" :{
+            "frames": { "start": 0, "end": 6, "first": 0 },
+            "frameRate": 1.5,
+            "repeat" : -1
+         },
+         "die":{
+            "frames": { "start": 0, "end": 6, "first": 0 },
+            "frameRate": 1.5,
+            "repeat" : -1
+         }
       }
    }
 }
