@@ -5,7 +5,8 @@ var playerManager = {
 
 playerManager.info.new = function () {
 	return {
-		name: 'NewPlayer'
+		name: 'NewPlayer',
+		sexy: true
 	};
 };
 
