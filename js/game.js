@@ -8,7 +8,6 @@ var onGround;
 var playerStats;
 var playerui;
 const { SPACE, LEFT, RIGHT, UP, DOWN, Q, W, E, R } = Phaser.Input.Keyboard.KeyCodes;
-var emitter = new Phaser.Events.EventEmitter();
 
 var buffered_movementData = {
     'lastSent': new Date().getTime(), 
@@ -22,6 +21,8 @@ Game.init = function(){
 };
 
 Game.preload = function() {
+    this.load.json("monsterData", 'assets/json/monsters.json');
+
     sprites = [
         "base",
         "johnny",
@@ -33,10 +34,8 @@ Game.preload = function() {
         this.load.pack(sprites[i], "assets/json/characters.json", sprites[i]);
     }
 
-    this.load.spritesheet('000', 
-        'assets/monster/strawtargetdummy.png',
-        { frameWidth: 90, frameHeight: 100 , margin: 4 }
-    );
+    // Load Monster Sprites. Json doesn't work in preload so will have to hard code.
+    this.load.spritesheet('monsterSprite_0', 'assets/monster/0.png', { frameWidth: 90, frameHeight: 100 , margin: 4 });
 
     this.load.tilemapTiledJSON('map', 'assets/json/icyfield.json');
     this.load.image('floor', 'assets/world/icyfield.png');
@@ -81,21 +80,26 @@ Game.create = function(){
     this.monsters = [];
 
     // Test Monster
+    // Move frame generation to animation
 
-    var config_000 = {
-        key: '000_walk',
-        frames: this.anims.generateFrameNumbers('000', { start: 0, end: 6, first: 0 }),
+    var config_0 = {
+        key: '0_walk',
+        frames: this.anims.generateFrameNumbers('monsterSprite_0', { start: 0, end: 6, first: 0 }),
         frameRate: 1.5,
         repeat: -1
     };
+    console.log('c0', config_0);
+    //console.log('M', new Monster())
 
-    this.anims.create(config_000);
+    this.anims.create(config_0);
 
-    var boom = this.matter.add.sprite(200, 600, '000', 0, {'inertia': 'Infinity', 'name':'trainingDummy'}); // change to matterjs eventually
+    // Move body creation to monsters.js
+    var boom = this.matter.add.sprite(200, 600, 'monsterSprite_0', 0, {'inertia': 'Infinity', 'name':'trainingDummy'});
     boom.body.collisionFilter.group = -1;
     boom.body.name = 'monsterBody';
-    boom.anims.play('000_walk');
+    boom.anims.play('0_walk');
 
+    // Ping server to get monster health for bar.
     boom.hp = new HealthBar(self, 0, 0);
     boom.hp.setPosition(boom.x-(boom.width), boom.y-(boom.height));
     this.monsters.push(boom);
@@ -189,7 +193,8 @@ Game.create = function(){
         };
     });
 
-    createSpriteAnimations(self, this.cache.json)
+    createSpriteAnimations(self, this.cache.json);
+    createMonsterAnimations(this);
     
     // Player Controls
     cursors = this.input.keyboard.addKeys({

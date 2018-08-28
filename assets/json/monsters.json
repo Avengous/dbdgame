@@ -1,0 +1,15 @@
+{  
+   "0":{  
+      "id":0,
+      "name":"Training Dummy",
+      "stats":{  
+         "level":1,
+         "hp":10000
+      },
+      "frameData":{  
+         "frameWidth":90,
+         "frameHeight":100,
+         "margin":4
+      }
+   }
+}
