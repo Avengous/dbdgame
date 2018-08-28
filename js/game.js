@@ -8,6 +8,7 @@ var onGround;
 var playerStats;
 var playerui;
 const { SPACE, LEFT, RIGHT, UP, DOWN, Q, W, E, R } = Phaser.Input.Keyboard.KeyCodes;
+var emitter = new Phaser.Events.EventEmitter();
 
 var buffered_movementData = {
     'lastSent': new Date().getTime(), 
@@ -146,7 +147,7 @@ Game.create = function(){
         };
     });
 
-    this.matter.world.on('collisionstart', function (event) {
+    this.matter.world.on('collisionstart', function (event, player) {
         var bodyA = event.pairs[0].bodyA;
         var bodyB = event.pairs[0].bodyB;
         var bodyNames = [bodyA.name, bodyB.name];
@@ -158,9 +159,18 @@ Game.create = function(){
 
         // Checks minion vs monsters
         if (bodyNames.includes('minionBody') && bodyNames.includes('monsterBody')) {
+            var data = {};
+            data[bodyA.name] = bodyA.id;
+            data[bodyB.name] = bodyB.id;
+            data['player'] = player;
 
+            // What data do i need to send?
+            // Monster ID (Will need to move monster stats server side)
+            // Player ID (To get player stats from server)
+            // Ability ID (To get damage algorithm server side)
+            bodyB.ability.emit('abilityHitEvent', data);
         }
-    });
+    }, this.player);
 
     // Listens for other player movement events from server and moves them on client.
     this.socket.on('playerMoved', function (playerInfo) {
@@ -269,11 +279,7 @@ Game.update = function(time, delta) {
             if (cursors.down.isDown) {
                 playerProneStab(this, playerCharacter);
             } else {
-                var playerAbility = new Ability(this).basicAttack();
-                playerAbility.on('testAbility', function(abilityObject) {
-                    console.log('success')
-                });
-                playerAbility.emit('testAbility', playerAbility);
+                new Ability(this).basicAttack();
             }
         }
     }

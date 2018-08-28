@@ -67,10 +67,11 @@ function getAllMethods(object) {
 }
 
 class Minion {
-    constructor (game, x, y) {
+    constructor (game, x, y, object) {
         this.game = game;
         this.x = x;
         this.y = y;
+        this.object = object;
     }
 
     circle(r=8) {
@@ -79,6 +80,7 @@ class Minion {
         this.body.name = 'minionBody'
         this.body.ignoreGravity = true;
         this.body.inertia = 'Infinity';
+        this.body.ability = this.object;
     }
 
     destroy() {
