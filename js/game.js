@@ -6,7 +6,6 @@ var playerCharacter;
 var standing;
 var onGround;
 var playerStats;
-var playerui;
 const { SPACE, LEFT, RIGHT, UP, DOWN, Q, W, E, R } = Phaser.Input.Keyboard.KeyCodes;
 
 var buffered_movementData = {
@@ -112,7 +111,7 @@ Game.create = function(){
             if (players[id].playerId === self.socket.id) {
                 player = addPlayer(self, players[id]);
                 playerStats = setPlayerStats(players[id]);
-                playerUi = createPlayerStatUI(self, players[id]);
+                //playerUi = createPlayerStatUI(self, players[id]);
                 self.cameras.main.startFollow(player);
                 //self.cameras.main.setDeadzone(50, 500);
                 //self.cameras.main.setBounds(500,500);

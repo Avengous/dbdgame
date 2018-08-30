@@ -1,3 +1,33 @@
+class HUD extends Phaser.Scene {
+
+    constructor () {
+        super({ key: 'HUD', active: true });
+
+    }
+
+    create () {
+        
+        let hud = this.scene.get('HUD');
+
+        /* Sample Add Events
+        let info = this.add.text(10, 10, 'Score: 0', { font: '48px Arial', fill: '#000000' });
+        hud.events.on('addScore', function () {
+
+            this.score += 10;
+
+            info.setText('Score: ' + this.score);
+
+        }, this);
+        */
+    }
+}
+
+class Button {
+    constructor (scene) {
+
+    }
+}
+
 class HealthBar {
 
     constructor (scene, x, y) {
@@ -58,12 +88,6 @@ class HealthBar {
         this.draw();
     }
 
-}
-
-function getAllMethods(object) {
-    return Object.getOwnPropertyNames(object).filter(function(property) {
-        return typeof object[property] == 'function';
-    });
 }
 
 class Minion {

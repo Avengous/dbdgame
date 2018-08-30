@@ -1,3 +1,4 @@
+// Deprecated
 function createPlayerStatUI(self, player) {
 	stats = player.stats;
 	info = player.info;
@@ -10,10 +11,6 @@ function createPlayerStatUI(self, player) {
 	return ui;
 };
 
-function updatePlayerStatUI(){
-
-}
-
 function setPlayerStats(player) {
 	stats = player.stats;
 	stats.hp = stats.hp + (stats.sta * (5 + Math.floor(stats.sta/10)))
@@ -21,10 +18,6 @@ function setPlayerStats(player) {
 	stats.mp = stats.mp + (stats.int * (0 + Math.floor(stats.int/5)))
 	return stats;
 };
-
-class UI {
-	
-}
 
 class Ability {
 
