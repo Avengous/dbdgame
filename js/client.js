@@ -1,7 +1,9 @@
-/*
 var Client = {};
 Client.socket = io.connect();
 
+Client.socket.on('monsterSpawnedEvent', Game.monster.create());
+
+/*
 Client.sendTest = function(){
     console.log("test sent");
     Client.socket.emit('test');
@@ -32,6 +34,5 @@ Client.socket.on('allplayers',function(data){
         Game.removePlayer(id);
     });
 });
-
-
 */
+

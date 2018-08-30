@@ -1,22 +1,20 @@
-function createMonsterAnimations(game) {
+Game.monster = {};
+
+Game.monster.createAnimations = function(game) {
 	var monsterData = game.cache.json.get('monsterData');
-	game.socket.on('monsterSpawnedEvent', spawnMonster());
-}
-
-function spawnMonster(game, monster, x, y) {
-
-}
-
-class Monster {
-
-	constructor() {
-
-		
+	for (monster in monsterData) {
+		var data = monsterData[monster];
+		for (animation in data.animation) {
+			game.anims.create({
+				key: 'monsterAnim_' + monster + '_' + animation,
+				frames: animation.frames,
+				frameRate: animation.frameRate,
+				repeat: animation.repeat
+			});
+		}
 	}
 }
 
-class MonsterAnimation {
-
+Game.monster.create = function(game, monster, x, y) {
 	
-
 }

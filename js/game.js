@@ -88,7 +88,7 @@ Game.create = function(){
         frameRate: 1.5,
         repeat: -1
     };
-    console.log('c0', config_0);
+   
     //console.log('M', new Monster())
 
     this.anims.create(config_0);
@@ -114,7 +114,6 @@ Game.create = function(){
                 playerStats = setPlayerStats(players[id]);
                 playerUi = createPlayerStatUI(self, players[id]);
                 self.cameras.main.startFollow(player);
-                console.log(player);
                 //self.cameras.main.setDeadzone(50, 500);
                 //self.cameras.main.setBounds(500,500);
             } else {
@@ -194,7 +193,7 @@ Game.create = function(){
     });
 
     createSpriteAnimations(self, this.cache.json);
-    createMonsterAnimations(this);
+    Game.monster.createAnimations(this);
     
     // Player Controls
     cursors = this.input.keyboard.addKeys({
