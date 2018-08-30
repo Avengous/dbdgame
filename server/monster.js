@@ -8,7 +8,7 @@ monsters.events.spawnMonster = function(data) {
 }
 
 monsters.startListeners = function(socket) {
-    socket.on('spawnMonsterEvent', monsters.events.spawnMonster());
+    //socket.on('spawnMonsterEvent', monsters.events.spawnMonster());
 }
 
 exports.monsters = monsters;
