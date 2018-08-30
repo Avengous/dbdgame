@@ -16,11 +16,11 @@ var config = {
             gravity: { y: 1.5 }
         }
 	},
-    scene: {
+    scene: [{
         preload: Game.preload,
         create: Game.create,
         update: Game.update
-    }
+    }, UIScene]
 };
 
 var game = new Phaser.Game(config);

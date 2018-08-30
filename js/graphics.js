@@ -1,3 +1,4 @@
+/*
 class HUD extends Phaser.Scene {
 
     constructor () {
@@ -9,6 +10,9 @@ class HUD extends Phaser.Scene {
         
         let hud = this.scene.get('HUD');
 
+        var q = this.add.graphics.fillRoundedRect(32, 32, 400, 400, 32);
+        q.fillStyle(0xffff00, 1);
+
         /* Sample Add Events
         let info = this.add.text(10, 10, 'Score: 0', { font: '48px Arial', fill: '#000000' });
         hud.events.on('addScore', function () {
@@ -18,9 +22,10 @@ class HUD extends Phaser.Scene {
             info.setText('Score: ' + this.score);
 
         }, this);
-        */
+        
     }
 }
+*/
 
 class Button {
     constructor (scene) {
