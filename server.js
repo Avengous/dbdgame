@@ -1,7 +1,8 @@
 var express = require('express');
 var app = express();
-var playerController = require('./server/controllers/player');
-var pm = playerController.playerManager;
+var playerManager = require('./server/player');
+var monsterManager = require('./server/monster');
+var pm = playerManager.playerManager;
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
 var players = {};
@@ -58,13 +59,7 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('playerAnimationChangeEvent', players[socket.id])
     });
 
-    socket.on('updatePlayerStatEvent', function(statData) {
-
-    });
-
-    socket.on('spawnMonster', function(monsterId) {
-
-    });
+    monsterManager.monsters.startListeners(socket);
 
 });
 

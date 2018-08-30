@@ -22,6 +22,10 @@ function setPlayerStats(player) {
 	return stats;
 };
 
+class UI {
+	
+}
+
 class Ability {
 
 	constructor(game) {
