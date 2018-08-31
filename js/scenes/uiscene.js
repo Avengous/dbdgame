@@ -14,10 +14,12 @@ var UIScene = new Phaser.Class({
     create: function ()
     {
         //  Our Text object to display the Score
-        var info = this.add.text(10, 10, 'ADMIN', { font: '36px Arial', fill: '#000000' });
+        var info = this.add.text(10, 10, 'DBDGAMEDEV', { font: '36px Arial', fill: '#000000' });
+
+        var menu = new Menu(this, config.width-30, 30);
 
         //  Grab a reference to the Game Scene
-        var ourGame = this.scene.get('GameScene');
+        var scene = this.scene.get('UIScene');
 
         //  Listen for events from it
         /*ourGame.events.on('addScore', function () {
@@ -30,3 +32,4 @@ var UIScene = new Phaser.Class({
     }
 
 });
+

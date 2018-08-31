@@ -1,7 +1,7 @@
 var Client = {};
 Client.socket = io.connect();
 
-Client.socket.on('monsterSpawnedEvent', Game.monster.create());
+//Client.socket.on('monsterSpawnedEvent', Game.monster.create());
 
 /*
 Client.sendTest = function(){

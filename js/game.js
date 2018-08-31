@@ -1,4 +1,6 @@
-var Game = {};
+var Game = {
+    main: null
+};
 var player;
 var cursors;
 var sprites ;
@@ -44,6 +46,7 @@ Game.preload = function() {
 
 Game.create = function(){
     var self = this;
+    Game.main = this;
     this.socket = io();
 
     var bgm = this.sound.add('bgm');
@@ -76,34 +79,7 @@ Game.create = function(){
     world = this.matter.world.convertTilemapLayer(groundLayer, {'name': 'groundLayer'});
 
     this.otherPlayers =[];
-    this.monsters = [];
-
-    // Test Monster
-    // Move frame generation to animation
-
-    var config_0 = {
-        key: '0_walk',
-        frames: this.anims.generateFrameNumbers('monsterSprite_0', { start: 0, end: 6, first: 0 }),
-        frameRate: 1.5,
-        repeat: -1
-    };
-   
-    //console.log('M', new Monster())
-
-    this.anims.create(config_0);
-
-    // Move body creation to monsters.js
-    var boom = this.matter.add.sprite(200, 600, 'monsterSprite_0', 0, {'inertia': 'Infinity', 'name':'trainingDummy'});
-    boom.body.collisionFilter.group = -1;
-    boom.body.name = 'monsterBody';
-    boom.anims.play('0_walk');
-
-    // Ping server to get monster health for bar.
-    boom.hp = new HealthBar(self, 0, 0);
-    boom.hp.setPosition(boom.x-(boom.width), boom.y-(boom.height));
-    this.monsters.push(boom);
-
-    // End Test Monster
+    this.monsters = []; // Not used i think
 
     // Adds current player and other previously connected players to game on connect
     this.socket.on('currentPlayers', function (players) {
