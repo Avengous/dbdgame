@@ -1,5 +1,5 @@
 var monsters = {
-	current = [];
+	current = []
 };
 
 monsters.addForNewPlayer = function(socket) {
