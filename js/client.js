@@ -1,7 +1,17 @@
 var Client = {};
 Client.socket = io.connect();
 
-//Client.socket.on('monsterSpawnedEvent', Game.monster.create());
+Client.createMonster = function(monsterId, x, y) {
+    Client.socket.emit('createMonsterEvent', monsterId, x, y);
+}
+
+Client.socket.on('createdMonsterEvent', function(monsters) {
+    for (monster in monsters) {
+        Game.monster.create(monster.id, monster.x, monster.y);
+    }
+})
+
+//Client.socket.on('createdMonsterEvent', Game.monster.create());
 
 /*
 Client.sendTest = function(){

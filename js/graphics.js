@@ -48,7 +48,7 @@ class Menu {
         });
 
         spawnDummyButton.on('pointerup', function() {
-            Game.monster.create(Game, 0, player.x, player.y)
+            Client.createMonster(0, player.x, player.y);
         });
 
         this.objects = [windowBG, windowLabel, spawnDummyButton];

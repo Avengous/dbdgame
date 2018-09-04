@@ -18,7 +18,7 @@ Game.monster.createAnimations = function(game) {
 	}
 }
 
-Game.monster.create = function(game, monsterId, x, y) {
+Game.monster.create = function(monsterId, x, y) {
 	var monster = Game.main.matter.add.sprite(x, y, 'monsterSprite_' + monsterId, 0, {'inertia': 'Infinity', 'name': Game.monster.monsterData[monsterId].name })	
 	monster.body.collisionFilter.group = -1;
 	monster.body.name = 'monsterBody';

@@ -59,7 +59,7 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('playerAnimationChangeEvent', players[socket.id])
     });
 
-    monsterManager.monsters.startListeners(socket);
+    monsterManager.monsters.startListeners(socket, io);
 
 });
 

@@ -1,14 +1,17 @@
 var monsters = {
-	events: {}
+	current = [];
 };
 
-// Eventually will need to move data server side and just pass an ID.
-monsters.events.spawnMonster = function(data) {
-
+monsters.addForNewPlayer = function(socket) {
+	socket.emit('createdMonsterEvent', monsters.current);
 }
 
-monsters.startListeners = function(socket) {
-    //socket.on('spawnMonsterEvent', monsters.events.spawnMonster());
+monsters.startListeners = function(socket, io) {
+    socket.on('createMonsterEvent', function (monsterId, x, y) {
+    	var monster = { id: monsterId, x: x, y: y };
+    	monsters.current.push(monster);
+    	io.emit('createdMonsterEvent', monster);
+    });
 }
 
 exports.monsters = monsters;
