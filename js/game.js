@@ -1,6 +1,4 @@
-var Game = {
-    main: null
-};
+var Game = {};
 var player;
 var cursors;
 var sprites ;
@@ -18,12 +16,11 @@ var buffered_movementData = {
 var queuedMovementEvents = {};
 
 Game.init = function(){
-    game.stage.disableVisibilityChange = true;
+    Game.monsterData = this.cache.json.get('monsterDataJson');
+    Game.main = this;
 };
 
 Game.preload = function() {
-    this.load.json("monsterData", 'assets/json/monsters.json');
-
     sprites = [
         "base",
         "johnny",
@@ -46,9 +43,8 @@ Game.preload = function() {
 
 Game.create = function(){
     var self = this;
-    Game.main = this;
     this.socket = io();
-
+    Client.getMonsterData();
     var bgm = this.sound.add('bgm');
     bgm.pauseOnBlur = false;
     bgm.play();

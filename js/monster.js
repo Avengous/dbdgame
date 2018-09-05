@@ -1,12 +1,14 @@
 Game.monster = {
 	current: [],
-	monsterData: null
 };
 
+Game.setMonsterData = function () {
+	return Game.main.cache.json.get('monsterData');
+}
+
 Game.monster.createAnimations = function(game) {
-	Game.monster.monsterData = game.cache.json.get('monsterData');
-	for (monster in Game.monster.monsterData) {
-		var data = Game.monster.monsterData[monster];
+	for (monster in Game.monsterData) {
+		var data = Game.monsterData[monster];
 		for (animation in data.animation) {
 			game.anims.create({
 				key: 'monsterAnim_' + monster + '_' + animation,
@@ -19,7 +21,7 @@ Game.monster.createAnimations = function(game) {
 }
 
 Game.monster.create = function(monsterId, x, y) {
-	var monster = Game.main.matter.add.sprite(x, y, 'monsterSprite_' + monsterId, 0, {'inertia': 'Infinity', 'name': Game.monster.monsterData[monsterId].name })	
+	var monster = Game.main.matter.add.sprite(x, y, 'monsterSprite_' + monsterId, 0, {'inertia': 'Infinity', 'name': Game.monsterData[monsterId].name })	
 	monster.body.collisionFilter.group = -1;
 	monster.body.name = 'monsterBody';
 	monster.anims.play('monsterAnim_' + monsterId + '_walk');

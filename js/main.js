@@ -17,9 +17,15 @@ var config = {
         }
 	},
     scene: [{
+        init: Game.init,
         preload: Game.preload,
         create: Game.create,
-        update: Game.update
+        update: Game.update,
+        pack: {
+            files: [
+                { type: 'json', key: 'monsterDataJson', url: 'assets/json/monsters.json' }
+            ]
+        }
     }, UIScene]
 };
 

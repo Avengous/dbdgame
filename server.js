@@ -6,6 +6,7 @@ var pm = playerManager.playerManager;
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
 var players = {};
+var monsterData = require('./assets/json/monsters.json');
 
 app.use('/css',express.static(__dirname + '/css'));
 app.use('/js',express.static(__dirname + '/js'));
@@ -58,6 +59,10 @@ io.on('connection', function (socket) {
         players[socket.id].animationFlipX = animationKey.flipX;
         socket.broadcast.emit('playerAnimationChangeEvent', players[socket.id])
     });
+
+    socket.on('getExistingMonstersEvent', function() {
+        monsterManager.monsters.addForNewPlayer(socket);
+    })
 
     monsterManager.monsters.startListeners(socket, io);
 
