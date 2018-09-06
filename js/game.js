@@ -95,7 +95,7 @@ Game.create = function(){
 
     // Add new players to game
     this.socket.on('newPlayer', function (playerInfo) {
-        addOtherPlayers(self, playerInfo);
+        //addOtherPlayers(self, playerInfo);
     });
 
     // Remove player from game on disconnect
