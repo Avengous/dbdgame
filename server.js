@@ -9,7 +9,7 @@ var players = {};
 var monsterData = require('./assets/json/monsters.json');
 
 app.use('/css',express.static(__dirname + '/css'));
-app.use('/js',express.static(__dirname + '/js'));
+app.use('/client',express.static(__dirname + '/client'));
 app.use('/assets',express.static(__dirname + '/assets'));
 
 app.get('/',function(req,res){
