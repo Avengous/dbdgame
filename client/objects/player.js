@@ -1,5 +1,4 @@
 import io from 'socket.io-client';
-import io from 'socket.io-client';
 import { NEW_PLAYER, ALL_PLAYERS, CHAT, KEY_PRESS, MOVE, STOP, REMOVE } from '../../shared/constants/actions/player';
 import { UP, LEFT, DOWN, RIGHT } from '../../shared/constants/directions';
 import { IMAGE_PLAYER } from '../constants/assets';
