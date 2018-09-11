@@ -1,3 +1,7 @@
+import { playerCharacter } from './game.js';
+import { Minion } from './graphics.js';
+import * as Anim from './animation.js';
+
 // Deprecated
 function createPlayerStatUI(self, player) {
 	stats = player.stats;
@@ -11,15 +15,15 @@ function createPlayerStatUI(self, player) {
 	return ui;
 };
 
-function setPlayerStats(player) {
-	stats = player.stats;
+export function setPlayerStats(player) {
+	var stats = player.stats;
 	stats.hp = stats.hp + (stats.sta * (5 + Math.floor(stats.sta/10)))
 	stats.end = stats.end + (stats.sta * (1 + Math.floor(stats.sta/20)))
 	stats.mp = stats.mp + (stats.int * (0 + Math.floor(stats.int/5)))
 	return stats;
 };
 
-class Ability {
+export class Ability {
 
 	constructor(game) {
 		this.game = game;
@@ -34,7 +38,7 @@ class Ability {
 	basicAttack() {
 		var offsetX = this.player.flipX ? (40) : -1*(40);
 		var m = new Minion(this.game, this.player.x + offsetX, this.player.y, this.object);
-		playerPunch(this.game, playerCharacter);
+		Anim.playerPunch(this.game, playerCharacter);
 
 		this.player.once('animationupdate', function(animation, frame) {
 			if (frame.isLast) {

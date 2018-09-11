@@ -1,3 +1,6 @@
+import { Game } from './game.js';
+import { HealthBar } from './graphics.js';
+
 Game.monster = {
 	current: [],
 };
@@ -7,9 +10,9 @@ Game.setMonsterData = function () {
 }
 
 Game.monster.createAnimations = function(game) {
-	for (monster in Game.monsterData) {
+	for (var monster in Game.monsterData) {
 		var data = Game.monsterData[monster];
-		for (animation in data.animation) {
+		for (var animation in data.animation) {
 			game.anims.create({
 				key: 'monsterAnim_' + monster + '_' + animation,
 				frames: game.anims.generateFrameNumbers('monsterSprite_' + monster, data.animation[animation].frames),

@@ -1,4 +1,6 @@
-var Client = {};
+import { Game } from './game.js'
+
+export var Client = {};
 Client.socket = io.connect();
 
 Client.getMonsterData = function() {
@@ -10,7 +12,7 @@ Client.createMonster = function(monsterId, x, y) {
 }
 
 Client.socket.on('createdMonsterEvent', function(monsters) {
-    for (i in monsters) {
+    for (var i in monsters) {
         var monster = monsters[i];
         Game.monster.create(monster.id, monster.x, monster.y);
     }

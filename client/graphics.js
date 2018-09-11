@@ -1,4 +1,7 @@
-class Menu {
+import { WIDTH, HEIGHT } from './constants/config.js';
+import { player } from './game.js';
+
+export class Menu {
 
     constructor(scene, x, y) {
         this.scene = scene;
@@ -6,7 +9,7 @@ class Menu {
         this.menuButton.container.on('pointerup', () => this.displayMenu());
         this.menuButton.draw();
 
-        this.container = new Phaser.GameObjects.Container(this.scene, config.width/2, config.height/2)
+        this.container = new Phaser.GameObjects.Container(this.scene, WIDTH/2, HEIGHT/2)
         this.container.active = false;
 
         var style = { 
@@ -49,7 +52,7 @@ class Menu {
 
         spawnDummyButton.on('pointerup', function() {
             Client.createMonster(0, player.x, player.y);
-        });
+        }, player);
 
         this.objects = [windowBG, windowLabel, spawnDummyButton];
     }
@@ -140,7 +143,7 @@ class Button {
     }
 }
 
-class HealthBar {
+export class HealthBar {
 
     constructor (scene, x, y) {
         this.bar = new Phaser.GameObjects.Graphics(scene);
@@ -193,7 +196,7 @@ class HealthBar {
 
 }
 
-class Minion {
+export class Minion {
     constructor (game, x, y, object) {
         this.game = game;
         this.x = x;

@@ -1,3 +1,6 @@
+import { WIDTH } from '../constants/config.js';
+import { Menu } from '../graphics.js';
+
 var UIScene = new Phaser.Class({
 
     Extends: Phaser.Scene,
@@ -16,7 +19,7 @@ var UIScene = new Phaser.Class({
         //  Our Text object to display the Score
         var info = this.add.text(10, 10, 'DBDGAMEDEV', { font: '36px Arial', fill: '#000000' });
 
-        var menu = new Menu(this, config.width-30, 30);
+        var menu = new Menu(this, WIDTH-30, 30);
 
         //  Grab a reference to the Game Scene
         var scene = this.scene.get('UIScene');
@@ -33,3 +36,4 @@ var UIScene = new Phaser.Class({
 
 });
 
+export default UIScene;

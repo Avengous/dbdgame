@@ -1,8 +1,12 @@
-var Game = {};
-var player;
+import * as anim from './animation.js';
+import { setPlayerStats, Ability } from './player.js';
+import { Client } from './client.js';
+
+export var Game = {};
+export var player;
 var cursors;
 var sprites ;
-var playerCharacter;
+export var playerCharacter;
 var standing;
 var onGround;
 var playerStats;
@@ -53,14 +57,14 @@ Game.create = function(){
         bgm.play();
     });
 
-    map = this.add.tilemap('map');
+    var map = this.add.tilemap('map');
     //var map = this.make.tilemap({ key: 'map' });
 
     //  Now add in the tileset. Tiled Tileset name and preloaded associated image.
-    tiles = map.addTilesetImage('icyfieldTileset', 'floor');
+    var tiles = map.addTilesetImage('icyfieldTileset', 'floor');
 
     //  Create our layers, Tiled LayerName
-    groundLayer = map.createStaticLayer('GroundLayer', tiles, 0, 0);
+    var groundLayer = map.createStaticLayer('GroundLayer', tiles, 0, 0);
     map.createStaticLayer('Background', tiles,0,0);
 
     // Everything will collide with this layer
@@ -72,7 +76,7 @@ Game.create = function(){
     // set collision on groundLayer
     groundLayer.setCollisionByProperty({ collides: true });
 
-    world = this.matter.world.convertTilemapLayer(groundLayer, {'name': 'groundLayer'});
+    var world = this.matter.world.convertTilemapLayer(groundLayer, {'name': 'groundLayer'});
 
     this.otherPlayers =[];
     this.monsters = []; // Not used i think
@@ -216,15 +220,15 @@ Game.update = function(time, delta) {
         if (cursors.left.isDown) {
             standing = false;
             this.player.setVelocityX(-5);
-            playerWalkLeft(this, playerCharacter);
+            anim.playerWalkLeft(this, playerCharacter);
         } else if (cursors.right.isDown) {
             standing = false;
             this.player.setVelocityX(5);
-            playerWalkRight(this, playerCharacter);
+            anim.playerWalkRight(this, playerCharacter);
         } else {
             this.player.setVelocityX(0);
             if (!standing) {
-                playerStand(this, playerCharacter);
+                anim.playerStand(this, playerCharacter);
                 standing = true;
             }
         }
@@ -239,20 +243,20 @@ Game.update = function(time, delta) {
         // Player Jump Animation
         if (onGround == false) {
             standing = false;
-            playerJump(this, playerCharacter);
+            anim.playerJump(this, playerCharacter);
         }
         
         // Player Prone Movement
         if (cursors.down.isDown) {   
             standing = false;
             if (onGround) this.player.setVelocityX(0);
-            playerProne(this, playerCharacter);
+            anim.playerProne(this, playerCharacter);
         }
 
         // Basic Attack
-        if (cursors.q.isDown && !ANIMATION_LOCK) {
+        if (cursors.q.isDown && !anim.ANIMATION_LOCK) {
             if (cursors.down.isDown) {
-                playerProneStab(this, playerCharacter);
+                anim.playerProneStab(this, playerCharacter);
             } else {
                 new Ability(this).basicAttack();
             }
@@ -301,12 +305,12 @@ function addOtherPlayers(self, playerInfo) {
 // Create animations for sprites from JSON in cache
 function createSpriteAnimations(self, json) {
     for (var i=0; i < sprites.length; i++) {
-        files = json.get(sprites[0])[sprites[i]]["files"]
-        keys = []
+        var files = json.get(sprites[0])[sprites[i]]["files"];
+        var keys = [];
         for (var k=0; k < files.length; k++) {
             keys.push(files[k]["key"])
         }
-        getFramesFromArray(self, keys.sort());
+        anim.   getFramesFromArray(self, keys.sort());
     }
 };
 
@@ -316,8 +320,4 @@ function moveOtherPlayer(player) {
         player.setPosition(events[i].x, events[i].y);
     };
     queuedMovementEvents[player.playerId] = [];
-}
-
-function randomInt (low, high) {
-    return Math.floor(Math.random() * (high - low) + low);
 }

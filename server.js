@@ -10,6 +10,7 @@ var monsterData = require('./assets/json/monsters.json');
 
 app.use('/css',express.static(__dirname + '/css'));
 app.use('/client',express.static(__dirname + '/client'));
+app.use('/utilities',express.static(__dirname + '/utilities'));
 app.use('/assets',express.static(__dirname + '/assets'));
 
 app.get('/',function(req,res){
