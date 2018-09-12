@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
-import { NEW_PLAYER, ALL_PLAYERS, CHAT, KEY_PRESS, MOVE, STOP, REMOVE } from '../../shared/constants/actions/player';
-import { UP, LEFT, DOWN, RIGHT } from '../../shared/constants/directions';
-import { IMAGE_PLAYER } from '../constants/assets';
+import { NEW_PLAYER, ALL_PLAYERS, CHAT, KEY_PRESS, MOVE, STOP, REMOVE } from '../constants/player.js';
+//import { UP, LEFT, DOWN, RIGHT } from '../../shared/constants/directions';
+//import { IMAGE_PLAYER } from '../constants/assets';
 import { SPEED } from '../constants/player';
 import { FADE_DURATION } from '../constants/config';
 
@@ -60,7 +60,7 @@ class Player {
         this.players[id].anims.play(direction);
         this.players[id].anims.stop();
     }
-
+    /*
     left() {
         this.players[this.socket.id].body.velocity.x = -SPEED;
         this.players[this.socket.id].anims.play(LEFT, true);
@@ -91,7 +91,7 @@ class Player {
         this.players[this.socket.id].anims.stop();
         this.socket.emit(STOP, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
     }
-
+    */
     registerChat() {
         let chat = document.getElementById(CHAT);
         let messages = document.getElementById('messages');

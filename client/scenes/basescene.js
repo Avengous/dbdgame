@@ -1,5 +1,5 @@
 //import { Scene } from 'phaser';
-//import Player from '../objects/player.js';
+import Player from '../objects/player.js';
 //import { FADE_DURATION } from '../constants/config.js';
 //import { STOP } from '../../shared/constants/actions/player';
 //import TilesetAnimation from './tileset-animation';
@@ -16,7 +16,7 @@ class BaseScene extends Phaser.Scene {
 
     init(position) {
         this.scene.setVisible(false, this.key);
-        //this.player = new Player(this, this.key, position);
+        this.player = new Player(this, this.key, position);
         this.layers = {};
         this.prevSceneKey = this.key;
         this.nextSceneKey = null;
