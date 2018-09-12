@@ -310,7 +310,7 @@ function createSpriteAnimations(self, json) {
         for (var k=0; k < files.length; k++) {
             keys.push(files[k]["key"])
         }
-        anim.   getFramesFromArray(self, keys.sort());
+        anim.getFramesFromArray(self, keys.sort());
     }
 };
 

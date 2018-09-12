@@ -1,15 +1,19 @@
-import { Scene } from 'phaser';
-import { UP, LEFT, DOWN, RIGHT } from '../../shared/constants/directions';
-import { TOWN } from '../../shared/constants/scenes';
-import { INIT } from '../constants/scenes';
-import { MAP_TOWN, MAP_HOUSE_1, MAP_HOUSE_2, IMAGE_HOUSE, IMAGE_TOWN, IMAGE_PLAYER } from '../constants/assets';
+//import { Scene } from 'phaser';
+//import { UP, LEFT, DOWN, RIGHT } from '../../shared/constants/directions';
+//import { TOWN } from '../../shared/constants/scenes';
+import { INIT, ICYFIELD } from '../constants/scenes.js';
+import * as anim from '../animation.js';
+
+const sprites = ["base","johnny","shock","stephen"];
+
+//import { MAP_TOWN, MAP_HOUSE_1, MAP_HOUSE_2, IMAGE_HOUSE, IMAGE_TOWN, IMAGE_PLAYER } from '../constants/assets';
 
 /*
 - Load all Tilemaps, Spritesheets
 - Generate all animations
 */
 
-class Init extends Scene {
+class Init extends Phaser.Scene {
     constructor() {
         super({ key: INIT });
         this.progressBar = null;
@@ -17,16 +21,23 @@ class Init extends Scene {
         this.progressRect = null;
     }
 
-    preload() {
-        this.load.tilemapTiledJSON(MAP_TOWN, 'assets/maps/town.json');
-        this.load.tilemapTiledJSON(MAP_HOUSE_1, 'assets/maps/house-1.json');
-        this.load.tilemapTiledJSON(MAP_HOUSE_2, 'assets/maps/house-2.json');
-        
-        this.load.spritesheet(IMAGE_HOUSE, 'assets/maps/house.png', { frameWidth: 32, frameHeight: 32 });
-        this.load.spritesheet(IMAGE_TOWN, 'assets/maps/town.png', { frameWidth: 32, frameHeight: 32 });
-        this.load.spritesheet(IMAGE_PLAYER, 'assets/sprites/player.png', { frameWidth: 32, frameHeight: 32 });
+    init() {
+        //Game.monsterData = this.cache.json.get('monsterDataJson');
+        //Game.main = this;
+    }
 
-        /* this.load.audio('music-town', ['assets/music/town.mp3']); */
+    preload() {
+        for (var i=0; i < sprites.length; i++) {
+            this.load.pack(sprites[i], "assets/json/characters.json", sprites[i]);
+        }
+
+        // Load Monster Sprites. Json doesn't work in preload so will have to hard code.
+        this.load.spritesheet('monsterSprite_0', 'assets/monster/0.png', { frameWidth: 90, frameHeight: 100 , margin: 4 });
+
+        this.load.tilemapTiledJSON('map', 'assets/json/icyfield.json');
+        this.load.image('floor', 'assets/world/icyfield.png');
+
+        this.load.audio('bgm', ['assets/sfx/bgm.m4a']);
 
         this.load.on('progress', this.onLoadProgress, this);
         this.load.on('complete', this.onLoadComplete, this);
@@ -39,33 +50,9 @@ class Init extends Scene {
             this.music.play();
         */
 
-        this.anims.create({
-            key: LEFT,
-            frames: this.anims.generateFrameNumbers(IMAGE_PLAYER, { start: 3, end: 5 }),
-            frameRate: 13,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: RIGHT,
-            frames: this.anims.generateFrameNumbers(IMAGE_PLAYER, { start: 6, end: 8 }),
-            frameRate: 13,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: UP,
-            frames: this.anims.generateFrameNumbers(IMAGE_PLAYER, { start: 9, end: 11 }),
-            frameRate: 13,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: DOWN,
-            frames: this.anims.generateFrameNumbers(IMAGE_PLAYER, { start: 0, end: 2 }),
-            frameRate: 13,
-            repeat: -1
-        });
+        // Create player animations (from animations.js)
+        createSpriteAnimations(this, this.cache.json);
+        //Game.monster.createAnimations(this); // Need to fix this
     }
 
     createProgressBar() {
@@ -97,5 +84,17 @@ class Init extends Scene {
             .fillRectShape(this.progressRect);
     }
 }
+
+// Create animations for sprites from JSON in cache
+function createSpriteAnimations(self, json) {
+    for (var i=0; i < sprites.length; i++) {
+        var files = json.get(sprites[0])[sprites[i]]["files"];
+        var keys = [];
+        for (var k=0; k < files.length; k++) {
+            keys.push(files[k]["key"])
+        }
+        anim.getFramesFromArray(self, keys.sort());
+    }
+};
 
 export default Init;

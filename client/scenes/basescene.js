@@ -1,14 +1,14 @@
-import { Scene } from 'phaser';
-//import Player from '../objects/player';
-import { FADE_DURATION } from '../constants/config';
+//import { Scene } from 'phaser';
+//import Player from '../objects/player.js';
+//import { FADE_DURATION } from '../constants/config.js';
 //import { STOP } from '../../shared/constants/actions/player';
 //import TilesetAnimation from './tileset-animation';
 
 const { SPACE, LEFT, RIGHT, UP, DOWN, Q, W, E, R } = Phaser.Input.Keyboard.KeyCodes;
 var cursors;
 
-class BaseScene extends Scene {
-    
+class BaseScene extends Phaser.Scene {
+
     constructor(key) {
         super({ key });
         this.key = key;
@@ -16,7 +16,7 @@ class BaseScene extends Scene {
 
     init(position) {
         this.scene.setVisible(false, this.key);
-        this.player = new Player(this, this.key, position);
+        //this.player = new Player(this, this.key, position);
         this.layers = {};
         this.prevSceneKey = this.key;
         this.nextSceneKey = null;
@@ -41,16 +41,20 @@ class BaseScene extends Scene {
 
         this.withTSAnimation = withTSAnimation;
         this.map = this.add.tilemap(tilemap);
-        this.tileset = this.map.addTilesetImage(tileset);
+
+        // Now add in the tileset. Tiled Tileset name and preloaded associated image.
+        // I added this.map.tilesets[0].name.
+        this.tileset = this.map.addTilesetImage(this.map.tilesets[0].name, tileset);
 
         for (let i = 0; i < this.map.layers.length; i++) {
             if (withTSAnimation)
                 this.layers[i] = this.map.createDynamicLayer(this.map.layers[i].name, this.tileset, 0, 0);
             else
+                console.log(i, this.map.layers[i].name);
                 this.layers[i] = this.map.createStaticLayer(this.map.layers[i].name, this.tileset, 0, 0);
         }
 
-        this.player.create();
+        //this.player.create();
 
         this.cameras.main.on('camerafadeincomplete', () => {
             this.transition = false;

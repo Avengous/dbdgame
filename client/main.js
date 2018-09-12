@@ -1,7 +1,9 @@
 //import Phaser, { Game } from 'phaser';
 import { WIDTH, HEIGHT, DEFAULT_GRAVITY } from './constants/config.js';
-import { Game } from './game.js';
-import UIScene from './scenes/uiscene.js';
+//import { Game } from './game.js';
+//import UIScene from './scenes/uiscene.js';
+import Init from './scenes/init.js';
+import Icyfield from './scenes/icyfield.js';
 
 var config = {
     type: Phaser.AUTO,
@@ -17,7 +19,10 @@ var config = {
             gravity: { y: DEFAULT_GRAVITY }
         }
 	},
-    scene: [{
+    scene: [
+        Init, Icyfield
+    ]
+    /*scene: [{
         init: Game.init,
         preload: Game.preload,
         create: Game.create,
@@ -27,7 +32,7 @@ var config = {
                 { type: 'json', key: 'monsterDataJson', url: 'assets/json/monsters.json' }
             ]
         }
-    }, UIScene]
+    }, UIScene]*/
 };
 
 const game = new Phaser.Game(config);
