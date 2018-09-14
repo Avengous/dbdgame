@@ -1,4 +1,5 @@
 import { Game } from './game.js'
+import io from 'socket.io';
 
 export var Client = {};
 Client.socket = io.connect();

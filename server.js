@@ -1,3 +1,4 @@
+/*
 var express = require('express');
 var app = express();
 var playerManager = require('./server/player');
@@ -76,3 +77,4 @@ server.listen(process.env.PORT || 8080, function () {
 function randomInt (low, high) {
     return Math.floor(Math.random() * (high - low) + low);
 }
+*/
