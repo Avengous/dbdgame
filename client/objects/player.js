@@ -56,7 +56,7 @@ class Player {
     }
 
     addPlayer(id, x, y, direction) {
-        this.players[id] = this.scene.physics.add.sprite(x, y, IMAGE_PLAYER);
+        this.players[id] = this.scene.matter.add.sprite(x, y, IMAGE_PLAYER);
         this.players[id].anims.play(direction);
         this.players[id].anims.stop();
     }

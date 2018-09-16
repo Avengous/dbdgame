@@ -1,5 +1,5 @@
 import { WIDTH } from '../constants/config.js';
-import { Menu } from '../graphics.js';
+//import { Menu } from '../graphics.js';
 
 var UIScene = new Phaser.Class({
 
@@ -9,9 +9,7 @@ var UIScene = new Phaser.Class({
 
     function UIScene ()
     {
-        Phaser.Scene.call(this, { key: 'UIScene', active: true });
-
-        this.score = 0;
+        Phaser.Scene.call(this, { key: 'UIScene', active: false });
     },
 
     create: function ()
@@ -19,10 +17,10 @@ var UIScene = new Phaser.Class({
         //  Our Text object to display the Score
         var info = this.add.text(10, 10, 'DBDGAMEDEV', { font: '36px Arial', fill: '#000000' });
 
-        var menu = new Menu(this, WIDTH-30, 30);
+        //var menu = new Menu(this, WIDTH-30, 30);
 
         //  Grab a reference to the Game Scene
-        var scene = this.scene.get('UIScene');
+        //var scene = this.scene.get('UIScene'); // Commenting this out until player object is created.
 
         //  Listen for events from it
         /*ourGame.events.on('addScore', function () {

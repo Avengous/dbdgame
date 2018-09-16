@@ -1,7 +1,7 @@
 //import { Scene } from 'phaser';
 //import { UP, LEFT, DOWN, RIGHT } from '../../shared/constants/directions';
 //import { TOWN } from '../../shared/constants/scenes';
-import { INIT, ICYFIELD } from '../constants/scenes.js';
+import { INIT, NEWCHAR } from '../constants/scenes.js';
 import * as anim from '../animation.js';
 
 const sprites = ["base","johnny","shock","stephen"];
@@ -68,7 +68,7 @@ class Init extends Phaser.Scene {
     }
 
     onLoadComplete(loader) {
-        this.scene.start(ICYFIELD);
+        var scene = this.scene.start(NEWCHAR);
         this.scene.shutdown();
     }
 

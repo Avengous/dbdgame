@@ -50,7 +50,6 @@ class BaseScene extends Phaser.Scene {
             if (withTSAnimation)
                 this.layers[i] = this.map.createDynamicLayer(this.map.layers[i].name, this.tileset, 0, 0);
             else
-                console.log(i, this.map.layers[i].name);
                 this.layers[i] = this.map.createStaticLayer(this.map.layers[i].name, this.tileset, 0, 0);
         }
 
