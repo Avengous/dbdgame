@@ -50,16 +50,18 @@ var NewCharScene = new Phaser.Class({
 
         sprite.setPosition(container.width/2, container.height/2)
 
-        container.on('pointerup', this.onCharSelect, label);
-        graphics.on('pointerover', function(){
+        container.on('pointerup', () => this.onCharSelect(label), label);
+        
+        container.add([graphics, text, sprite]);
+
+        container.getAt(0).on('pointerover', function(){
             this.fillStyle(0xFF0000);
+            console.log('test')
         });
 
-        container.add([graphics, text, sprite]);
         this.add.existing(container);
 
-
-
+        console.log(container.getAt(0));
     },
 
     onLoadComplete: function (loader) {
@@ -68,7 +70,7 @@ var NewCharScene = new Phaser.Class({
         this.scene.shutdown();
     },
 
-    onCharSelect: function (ponter, x, selection) {
+    onCharSelect: function (selection) {
         console.log('onCharSelect', selection);
     }
 
