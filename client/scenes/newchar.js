@@ -3,7 +3,7 @@ import { WIDTH, HEIGHT } from '../constants/config.js';
 import { UISCENE, ICYFIELD } from '../constants/scenes.js';
 import { CHARACTERS } from '../constants/sprites.js';
 import { FontStyle,  } from  '../constants/styles.js';
-import { playerStand, playerAlert } from '../animation.js';
+import { STAND1, WALK1 } from '../constants/animation.js'
 
 var NewCharScene = new Phaser.Class({
 
@@ -22,7 +22,6 @@ var NewCharScene = new Phaser.Class({
     create: function () {
         let info = this.add.text(WIDTH/2, 20, 'Character Creation', { font: '36px Arial', fill: '#000000' });
         info.setOrigin(0.5);
-        console.log('This', this);
         var i = 15;
         for (var label in CHARACTERS) {
             var sprite = CHARACTERS[label].spriteHeader;
@@ -32,46 +31,46 @@ var NewCharScene = new Phaser.Class({
     },
 
     createCharacterButton: function(label, sprite, position) {
-        var container = new Phaser.GameObjects.Container(this, position, HEIGHT/2)
-            .setSize(100, 150)
-            .setInteractive();
+        var container = new Phaser.GameObjects.Container(this, position, HEIGHT/2);
 
         var rect = new Phaser.Geom.Rectangle(0, 0, 100, 150);
         var graphics = new Phaser.GameObjects.Graphics(this)
             .fillStyle(0x000000)
             .fillRectShape(rect)
-            .setInteractive();
+            .lineStyle(3, 0xFFFFFF)
+            .strokeRect(rect.x, rect.y, rect.width, rect.height);
 
         var text = new Phaser.GameObjects.Text(this, 0, 0, label, FontStyle)
             .setAlign('center');
-        text.setPadding((container.width-text.width)/2, 0, 0, 0);
+        text.setPadding((rect.width-text.width)/2, 0, 0, 0);
 
-        var sprite = new Phaser.GameObjects.Sprite(this, 0, 0, sprite + '_stand1_0');
+        var spriteObj = new Phaser.GameObjects.Sprite(this, 0, 0, sprite + '_stand1_0');
 
-        sprite.setPosition(container.width/2, container.height/2)
+        spriteObj.setPosition(position+(rect.width/2), HEIGHT/2+(rect.height/2));
+        spriteObj.anims.play(sprite + '_' + STAND1, true);
 
-        container.on('pointerup', () => this.onCharSelect(label), label);
-        
-        container.add([graphics, text, sprite]);
+        container.add([graphics, text]);
+        container.setInteractive(rect, Phaser.Geom.Rectangle.Contains);
 
-        container.getAt(0).on('pointerover', function(){
-            this.fillStyle(0xFF0000);
-            console.log('test')
-        });
+        container.on('pointerup', () => this.onCharSelect(label));
+        container.on('pointerover', () => this.onHover(sprite, spriteObj, WALK1, graphics, 0x44FF44, rect));
+        container.on('pointerout', () => this.onHover(sprite, spriteObj, STAND1, graphics, 0xFFFFFF, rect, 3));
 
         this.add.existing(container);
-
-        console.log(container.getAt(0));
+        this.add.existing(spriteObj);
     },
 
-    onLoadComplete: function (loader) {
-        this.scene.start(UISCENE);
-        this.scene.start(ICYFIELD);
-        this.scene.shutdown();
+    onCharSelect: function(selection) {
+        //let player = this.player.players[this.player.socket.id];
+        //this.scene.start(UISCENE);
+        //this.scene.start(ICYFIELD);
+        //this.scene.shutdown();
     },
 
-    onCharSelect: function (selection) {
-        console.log('onCharSelect', selection);
+    onHover: function(label, sprite, anim, object, color, shape, size=3){
+        sprite.anims.play(label + '_' + anim, true);
+        object.lineStyle(size, color)
+        object.strokeRect(shape.x, shape.y, shape.width, shape.height);
     }
 
 });
