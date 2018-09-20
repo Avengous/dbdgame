@@ -14,9 +14,9 @@ class BaseScene extends Phaser.Scene {
         this.key = key;
     }
 
-    init(position) {
+    init(position, data) {
         this.scene.setVisible(false, this.key);
-        this.player = new Player(this, this.key, position);
+        this.player = new Player(this, this.key, position, data);
         this.layers = {};
         this.prevSceneKey = this.key;
         this.nextSceneKey = null;
@@ -53,7 +53,7 @@ class BaseScene extends Phaser.Scene {
                 this.layers[i] = this.map.createStaticLayer(this.map.layers[i].name, this.tileset, 0, 0);
         }
 
-        //this.player.create();
+        this.player.create(this.data);
 
         this.cameras.main.on('camerafadeincomplete', () => {
             this.transition = false;

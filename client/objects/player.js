@@ -5,20 +5,24 @@ import { NEW_PLAYER, ALL_PLAYERS, CHAT, KEY_PRESS, MOVE, STOP, REMOVE } from '..
 import { SPEED } from '../constants/player';
 import { FADE_DURATION } from '../constants/config';
 
+import { FLY } from '../constants/animation.js';
+
 class Player {
-    constructor(scene, room, position) {
+    constructor(scene, room, position, data) {
         this.scene = scene;
         this.room = room;
+        //this.sprite = sprite;
         this.position = position;
         this.socket = io();
         this.players = {};
+        this.sprite = data.sprite;
     }
 
     create() {
-        this.socket.emit(NEW_PLAYER, this.room, this.position);
+        this.socket.emit(NEW_PLAYER, this.room, this.position, this.sprite);
 
         this.socket.on(NEW_PLAYER, (data) => {
-            this.addPlayer(data.id, data.x, data.y, data.direction);
+            this.addPlayer(data.id, data.x, data.y, data.sprite);
         });
 
         this.socket.on(ALL_PLAYERS, (data) => {
@@ -26,10 +30,10 @@ class Player {
             this.scene.scene.setVisible(true, this.room);
 
             for (let i = 0; i < data.length; i++) {
-                this.addPlayer(data[i].id, data[i].x, data[i].y, data[i].direction);
+                this.addPlayer(data[i].id, data[i].x, data[i].y, data[i].sprite);
             }
-
-            this.scene.physics.world.setBounds(0, 0, this.scene.map.widthInPixels, this.scene.map.heightInPixels);
+            console.log(this);
+            this.scene.matter.world.setBounds(0, 0, this.scene.map.widthInPixels, this.scene.map.heightInPixels);
             this.scene.cameras.main.setBounds(0, 0, this.scene.map.widthInPixels, this.scene.map.heightInPixels);
             this.scene.cameras.main.startFollow(this.players[this.socket.id], true);
             this.players[this.socket.id].setCollideWorldBounds(true);
@@ -55,10 +59,10 @@ class Player {
         });
     }
 
-    addPlayer(id, x, y, direction) {
-        this.players[id] = this.scene.matter.add.sprite(x, y, IMAGE_PLAYER);
-        this.players[id].anims.play(direction);
-        this.players[id].anims.stop();
+    addPlayer(id, x, y, sprite) {
+        this.players[id] = this.scene.matter.add.sprite(x, y, sprite.spriteHeader + '_stand1_0');
+        //this.players[id].anims.play(direction);
+        //this.players[id].anims.stop();
     }
     /*
     left() {

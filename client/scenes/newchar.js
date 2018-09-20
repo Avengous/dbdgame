@@ -3,7 +3,8 @@ import { WIDTH, HEIGHT } from '../constants/config.js';
 import { UISCENE, ICYFIELD } from '../constants/scenes.js';
 import { CHARACTERS } from '../constants/sprites.js';
 import { FontStyle,  } from  '../constants/styles.js';
-import { STAND1, WALK1 } from '../constants/animation.js'
+import { STAND1, WALK1 } from '../constants/animation.js';
+import Player from '../objects/player.js';
 
 var NewCharScene = new Phaser.Class({
 
@@ -61,10 +62,11 @@ var NewCharScene = new Phaser.Class({
     },
 
     onCharSelect: function(selection) {
-        //let player = this.player.players[this.player.socket.id];
-        //this.scene.start(UISCENE);
-        //this.scene.start(ICYFIELD);
-        //this.scene.shutdown();
+        this.scene.start(UISCENE);
+        this.scene.start(ICYFIELD, {
+            'sprite': CHARACTERS[selection]
+        });
+        this.scene.shutdown();
     },
 
     onHover: function(label, sprite, anim, object, color, shape, size=3){

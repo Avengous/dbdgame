@@ -6,11 +6,11 @@ class Player extends BaseModel {
     static onConnect(io, socket) {
         let player;
 
-        socket.on(NEW_PLAYER, (room, position) => {
+        socket.on(NEW_PLAYER, (room, position, sprite) => {
             socket.join(room);
             socket.room = room;
 
-            player = new Player(socket.id, position);
+            player = new Player(socket.id, position, sprite);
             Player.list[room][socket.id] = player;
 
             let players = [];
@@ -46,8 +46,8 @@ class Player extends BaseModel {
         io.to(socket.room).emit(REMOVE, socket.id);
     }
 
-    constructor(id, position) {
-        super(id, position.x, position.y);
+    constructor(id, position, sprite) {
+        super(id, position.x, position.y, sprite);
         this.direction = position.direction;
     }
 

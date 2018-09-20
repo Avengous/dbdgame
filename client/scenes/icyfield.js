@@ -1,11 +1,6 @@
-//import io from 'socket.io-client';
 import BaseScene from './basescene.js';
-//import { DOWN } from '../../shared/constants/directions';
-//import { HOUSE_1, HOUSE_2, TOWN } from '../../shared/constants/scenes';
 import { MAP_ICYFIELD, IMAGE_ICYFIELD } from '../constants/maps.js';
 import { ICYFIELD } from '../constants/scenes.js';
-
-// Creating from extending Town
 
 class Icyfield extends BaseScene {
     constructor() {
@@ -13,7 +8,7 @@ class Icyfield extends BaseScene {
     }
 
     init(data) {
-        super.init(this.getPosition(data)); 
+        super.init(this.getPosition(), data); 
     }
 
     create() {
@@ -40,7 +35,7 @@ class Icyfield extends BaseScene {
         */
     }
 
-    getPosition(data) {
+    getPosition() {
         return { x: 400, y: 300 };
     }
 }
