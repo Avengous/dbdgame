@@ -78,25 +78,3 @@ var NewCharScene = new Phaser.Class({
 });
 
 export default NewCharScene;
-/*
-let Rectangle = Phaser.Geom.Rectangle;
-let main = Rectangle.Clone(this.cameras.main);
-
-this.progressRect = new Rectangle(0, 0, main.width / 2, 50);
-Rectangle.CenterOn(this.progressRect, main.centerX, main.centerY);
-
-this.progressCompleteRect = Phaser.Geom.Rectangle.Clone(this.progressRect);
-
-this.progressBar = this.add.graphics();
-
-
-    self.player = self.matter.add.sprite(
-        400,
-        300, 
-        playerInfo.character + '_stand1_0', 
-        0, 
-        {'inertia': 'Infinity',
-         'name': 'playerSprite'
-        }
-    );
-*/

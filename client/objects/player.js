@@ -1,21 +1,22 @@
 import io from 'socket.io-client';
 import { NEW_PLAYER, ALL_PLAYERS, CHAT, KEY_PRESS, MOVE, STOP, REMOVE } from '../constants/player.js';
 //import { UP, LEFT, DOWN, RIGHT } from '../../shared/constants/directions';
-//import { IMAGE_PLAYER } from '../constants/assets';
 import { SPEED } from '../constants/player';
 import { FADE_DURATION } from '../constants/config';
-
-import { FLY } from '../constants/animation.js';
 
 class Player {
     constructor(scene, room, position, data) {
         this.scene = scene;
         this.room = room;
-        //this.sprite = sprite;
         this.position = position;
         this.socket = io();
         this.players = {};
         this.sprite = data.sprite;
+        this.standing = false;
+        this.onGround = false;
+
+
+
     }
 
     create() {
@@ -32,11 +33,12 @@ class Player {
             for (let i = 0; i < data.length; i++) {
                 this.addPlayer(data[i].id, data[i].x, data[i].y, data[i].sprite);
             }
-            console.log(this);
             this.scene.matter.world.setBounds(0, 0, this.scene.map.widthInPixels, this.scene.map.heightInPixels);
             this.scene.cameras.main.setBounds(0, 0, this.scene.map.widthInPixels, this.scene.map.heightInPixels);
             this.scene.cameras.main.startFollow(this.players[this.socket.id], true);
-            this.players[this.socket.id].setCollideWorldBounds(true);
+
+            // Don't remember what this was for.
+            this.players[this.socket.id].body.collisionFilter.group = -1;
 
             this.socket.on(MOVE, (data) => {
                 this.players[data.id].x = data.x;
@@ -55,48 +57,50 @@ class Player {
                 delete this.players[id];
             });
 
-            this.registerChat();
+            // Not implemented
+            //this.registerChat();
         });
     }
 
     addPlayer(id, x, y, sprite) {
-        this.players[id] = this.scene.matter.add.sprite(x, y, sprite.spriteHeader + '_stand1_0');
+        this.players[id] = this.scene.matter.add.sprite(x, y, sprite.spriteHeader + '_stand1_0', 0, { 'inertia': 'Infinity', 'name': 'playerSprite' });
         //this.players[id].anims.play(direction);
         //this.players[id].anims.stop();
     }
-    /*
+    
     left() {
-        this.players[this.socket.id].body.velocity.x = -SPEED;
-        this.players[this.socket.id].anims.play(LEFT, true);
-        this.socket.emit(KEY_PRESS, LEFT, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
+        //this.players[this.socket.id].body.velocity.x = -SPEED;
+        //this.players[this.socket.id].anims.play(LEFT, true);
+        //this.socket.emit(KEY_PRESS, LEFT, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
     }
 
     right() {
-        this.players[this.socket.id].body.velocity.x = SPEED;
-        this.players[this.socket.id].anims.play(RIGHT, true);
-        this.socket.emit(KEY_PRESS, RIGHT, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
+        //this.players[this.socket.id].body.velocity.x = SPEED;
+        //this.players[this.socket.id].anims.play(RIGHT, true);
+        //this.socket.emit(KEY_PRESS, RIGHT, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
     }
 
     up() {
-        this.players[this.socket.id].body.velocity.y = -SPEED;
-        this.players[this.socket.id].anims.play(UP, true);
-        this.socket.emit(KEY_PRESS, UP, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
+        //this.players[this.socket.id].body.velocity.y = -SPEED;
+        //this.players[this.socket.id].anims.play(UP, true);
+        //this.socket.emit(KEY_PRESS, UP, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
     }
 
     down() {
-        this.players[this.socket.id].body.velocity.y = SPEED;
-        this.players[this.socket.id].anims.play(DOWN, true);
-        this.socket.emit(KEY_PRESS, DOWN, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
+        //this.players[this.socket.id].body.velocity.y = SPEED;
+        //this.players[this.socket.id].anims.play(DOWN, true);
+        //this.socket.emit(KEY_PRESS, DOWN, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
     }
 
     stop() {
-        this.players[this.socket.id].body.velocity.x = 0;
-        this.players[this.socket.id].body.velocity.y = 0;
-        this.players[this.socket.id].anims.stop();
-        this.socket.emit(STOP, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
+        //this.players[this.socket.id].body.velocity.x = 0;
+        //this.players[this.socket.id].body.velocity.y = 0;
+        //this.players[this.socket.id].anims.stop();
+        //this.socket.emit(STOP, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
     }
-    */
+    
     registerChat() {
+        /* - Not implemented
         let chat = document.getElementById(CHAT);
         let messages = document.getElementById('messages');
 
@@ -112,6 +116,7 @@ class Player {
             messages.innerHTML += `${name}: ${message}<br>`;
             messages.scrollTo(0, messages.scrollHeight);
         });
+        */
     }
 }
 

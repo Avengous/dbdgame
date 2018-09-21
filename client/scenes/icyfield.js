@@ -18,6 +18,12 @@ class Icyfield extends BaseScene {
     registerCollision() {
         let player = this.player.players[this.player.socket.id];
 
+        // Let everything collide with ground layer.
+        this.layers[0].setCollisionByExclusion([-1]);
+        this.layers[0].setCollisionByProperty({ collides: true });
+        this.matter.world.setBounds(0, 0, this.layers[0].width, this.layers[0].height);
+        this.matter.world.convertTilemapLayer(this.layers[0]);
+
         /*
         this.physics.add.collider(player, this.layers[6]);
         this.physics.add.collider(player, this.layers[8]);

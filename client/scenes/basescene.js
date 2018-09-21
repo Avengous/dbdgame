@@ -5,7 +5,6 @@ import Player from '../objects/player.js';
 //import TilesetAnimation from './tileset-animation';
 
 const { SPACE, LEFT, RIGHT, UP, DOWN, Q, W, E, R } = Phaser.Input.Keyboard.KeyCodes;
-var cursors;
 
 class BaseScene extends Phaser.Scene {
 
@@ -27,7 +26,7 @@ class BaseScene extends Phaser.Scene {
     create(tilemap, tileset, withTSAnimation) {
 
         // Player Controls
-        cursors = this.input.keyboard.addKeys({
+        this.cursors = this.input.keyboard.addKeys({
             space: SPACE,
             left: LEFT,
             right: RIGHT,
@@ -43,7 +42,7 @@ class BaseScene extends Phaser.Scene {
         this.map = this.add.tilemap(tilemap);
 
         // Now add in the tileset. Tiled Tileset name and preloaded associated image.
-        // I added this.map.tilesets[0].name.
+        // Added this.map.tilesets[0].name.
         this.tileset = this.map.addTilesetImage(this.map.tilesets[0].name, tileset);
 
         for (let i = 0; i < this.map.layers.length; i++) {
@@ -51,7 +50,11 @@ class BaseScene extends Phaser.Scene {
                 this.layers[i] = this.map.createDynamicLayer(this.map.layers[i].name, this.tileset, 0, 0);
             else
                 this.layers[i] = this.map.createStaticLayer(this.map.layers[i].name, this.tileset, 0, 0);
+            this.layers[i].name = this.map.layers[i].name;
         }
+
+        // Must setup collision before creating player.
+        this.registerCollision();
 
         this.player.create(this.data);
 
@@ -64,8 +67,9 @@ class BaseScene extends Phaser.Scene {
                 }
             });
             
-            this.registerCollision();
-            this.registerController();
+            
+            // Not Implemented
+            //this.registerController();
         });
 
         this.cameras.main.on('camerafadeoutcomplete', this.changeScene.bind(this));
@@ -73,13 +77,13 @@ class BaseScene extends Phaser.Scene {
 
     update() {
         if (this.transition === false) {
-            if (this.keyLeft.isDown) {
+            if (this.cursors.left.isDown) {
                 this.player.left();
-            } else if (this.keyRight.isDown) {
+            } else if (this.cursors.right.isDown) {
                 this.player.right();
-            } else if (this.keyUp.isDown) {
+            } else if (this.cursors.up.isDown) {
                 this.player.up();
-            } else if (this.keyDown.isDown) {
+            } else if (this.cursors.down.isDown) {
                 this.player.down();
             }
         }
@@ -110,10 +114,12 @@ class BaseScene extends Phaser.Scene {
     }
 
     registerController() {
+        /* Not Implemented
         this.hold(document.getElementById('up'), this.player.up.bind(this.player));
         this.hold(document.getElementById('down'), this.player.down.bind(this.player));
         this.hold(document.getElementById('left'), this.player.left.bind(this.player));
         this.hold(document.getElementById('right'), this.player.right.bind(this.player));
+        */
     }
 
     hold(btn, action) {
