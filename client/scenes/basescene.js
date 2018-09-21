@@ -88,6 +88,10 @@ class BaseScene extends Phaser.Scene {
             if (Phaser.Input.Keyboard.JustDown(this.cursors.space) && !this.cursors.down.isDown) {
                 this.player.jump();
             }
+
+            if (this.cursors.down.isDown) {
+                this.player.prone();
+            }
         }
     }
 

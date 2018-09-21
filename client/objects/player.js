@@ -1,4 +1,5 @@
 import io from 'socket.io-client';
+import * as Animation from '../animation';
 import { NEW_PLAYER, ALL_PLAYERS, CHAT, KEY_PRESS, MOVE, STOP, REMOVE } from '../constants/player';
 import { CLIMB, LEFT, PRONE, RIGHT, JUMP, SPEED } from '../constants/player';
 import { FADE_DURATION } from '../constants/config';
@@ -88,43 +89,47 @@ class Player {
     }
 
     addPlayer(id, x, y, sprite) {
-        this.players[id] = this.scene.matter.add.sprite(x, y, sprite.spriteHeader + '_stand1_0', 0, { 'inertia': 'Infinity', 'name': 'playerSprite' });
-        //this.players[id].anims.play(direction);
-        //this.players[id].anims.stop();
+        this.players[id] = this.scene.matter.add.sprite(
+            x, 
+            y, 
+            sprite.spriteHeader + '_stand1_0', 
+            0, 
+            { 'inertia': 'Infinity', 'name': 'playerSprite' }
+        );
     }
     
     left() {
         this.standing = false;
         this.players[this.socket.id].setVelocityX(-SPEED);
-        //this.players[this.socket.id].anims.play(LEFT, true);
+        Animation.playerWalkLeft(this, this.sprite.spriteHeader);
         this.socket.emit(KEY_PRESS, LEFT, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
     }
 
     right() {
         this.standing = false;
         this.players[this.socket.id].setVelocityX(SPEED);
-        //this.players[this.socket.id].anims.play(RIGHT, true);
+        Animation.playerWalkRight(this, this.sprite.spriteHeader);
         this.socket.emit(KEY_PRESS, RIGHT, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
     }
 
     prone() {
-        //this.players[this.socket.id].body.velocity.y = -SPEED;
-        //this.players[this.socket.id].anims.play(UP, true);
-        //this.socket.emit(KEY_PRESS, UP, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
+        // Will need to figure out how to modify the hitbox of player sprite for proper prone.
+        this.standing = false;
+        if (this.onGround) this.players[this.socket.id].setVelocityX(0);
+        Animation.playerProne(this, this.sprite.spriteHeader);
     }
 
     jump() {
-        // Player Jump Movement
-        console.log(this.onGround);
         if (this.onGround) {
             this.onGround = false;
             this.standing = false;
             this.players[this.socket.id].setVelocityY(-10);
+            Animation.playerJump(this, this.sprite.spriteHeader);
         }
-        // Player Jump Animation
+
         if (this.onGround == false) {
             this.standing = false;
-            //anim.playerJump(this, playerCharacter);
+            Animation.playerJump(this, this.sprite.spriteHeader);
         }
         this.socket.emit(KEY_PRESS, JUMP, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
     }
@@ -132,7 +137,7 @@ class Player {
     stop() {
         this.players[this.socket.id].setVelocityX(0);
         if (!this.standing) {
-            // play standing animation
+            Animation.playerStand(this, this.sprite.spriteHeader);
             this.standing = true;
         }
         this.socket.emit(STOP, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });

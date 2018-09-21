@@ -72,12 +72,12 @@ function createAnimation(self, data) {
 
 function playAnimation(self, animationKey, flipX = null) {
     if (ANIMATION_LOCK) return;
-    if (flipX === true) {
-        self.player.flipX = true;
-    } else if (flipX === false) {
-        self.player.flipX = false;
+    if (flipX === true) {    
+        self.players[self.socket.id].flipX = true;
+    } else if (flipX === false) {   
+        self.players[self.socket.id].flipX = false;
     }
-    self.player.anims.play(animationKey, true);
+    self.players[self.socket.id].anims.play(animationKey, true);
     self.socket.emit('animationEvent', { key: animationKey, flipX: flipX });
 };
 
