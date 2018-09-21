@@ -67,7 +67,6 @@ class BaseScene extends Phaser.Scene {
                 }
             });
             
-            
             // Not Implemented
             //this.registerController();
         });
@@ -77,14 +76,17 @@ class BaseScene extends Phaser.Scene {
 
     update() {
         if (this.transition === false) {
+
             if (this.cursors.left.isDown) {
                 this.player.left();
             } else if (this.cursors.right.isDown) {
                 this.player.right();
-            } else if (this.cursors.up.isDown) {
-                this.player.up();
-            } else if (this.cursors.down.isDown) {
-                this.player.down();
+            } else {
+                this.player.stop();
+            }
+
+            if (Phaser.Input.Keyboard.JustDown(this.cursors.space) && !this.cursors.down.isDown) {
+                this.player.jump();
             }
         }
     }

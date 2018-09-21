@@ -22,7 +22,9 @@ class Icyfield extends BaseScene {
         this.layers[0].setCollisionByExclusion([-1]);
         this.layers[0].setCollisionByProperty({ collides: true });
         this.matter.world.setBounds(0, 0, this.layers[0].width, this.layers[0].height);
-        this.matter.world.convertTilemapLayer(this.layers[0]);
+        
+        // Name key lets us easily find a specific layer to detect collisions against
+        this.matter.world.convertTilemapLayer(this.layers[0], {'name': 'groundLayer'});
 
         /*
         this.physics.add.collider(player, this.layers[6]);

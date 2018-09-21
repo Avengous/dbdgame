@@ -1,7 +1,6 @@
 import io from 'socket.io-client';
-import { NEW_PLAYER, ALL_PLAYERS, CHAT, KEY_PRESS, MOVE, STOP, REMOVE } from '../constants/player.js';
-//import { UP, LEFT, DOWN, RIGHT } from '../../shared/constants/directions';
-import { SPEED } from '../constants/player';
+import { NEW_PLAYER, ALL_PLAYERS, CHAT, KEY_PRESS, MOVE, STOP, REMOVE } from '../constants/player';
+import { CLIMB, LEFT, PRONE, RIGHT, JUMP, SPEED } from '../constants/player';
 import { FADE_DURATION } from '../constants/config';
 
 class Player {
@@ -14,9 +13,6 @@ class Player {
         this.sprite = data.sprite;
         this.standing = false;
         this.onGround = false;
-
-
-
     }
 
     create() {
@@ -57,9 +53,38 @@ class Player {
                 delete this.players[id];
             });
 
+            this.scene.matter.world.on('collisionstart', function (event, player) {
+                var bodyA = event.pairs[0].bodyA;
+                var bodyB = event.pairs[0].bodyB;
+                var bodyNames = [bodyA.name, bodyB.name];
+
+                // Checks player against ground
+                if (bodyNames.includes('playerSprite'), bodyNames.includes('groundLayer')) {
+                    this.setOnGround(true);
+                }
+
+                // Checks minion vs monsters
+                if (bodyNames.includes('minionBody') && bodyNames.includes('monsterBody')) {
+                    var data = {};
+                    data[bodyA.name] = bodyA.id;
+                    data[bodyB.name] = bodyB.id;
+                    data['player'] = player.players[this.socket.id];
+
+                    // What data do i need to send?
+                    // Monster ID (Will need to move monster stats server side)
+                    // Player ID (To get player stats from server)
+                    // Ability ID (To get damage algorithm server side)
+                    bodyB.ability.emit('abilityHitEvent', data);
+                }
+            }, this);
+
             // Not implemented
             //this.registerChat();
         });
+    }
+
+    setOnGround(bool) {
+        this.onGround = bool;
     }
 
     addPlayer(id, x, y, sprite) {
@@ -69,34 +94,48 @@ class Player {
     }
     
     left() {
-        //this.players[this.socket.id].body.velocity.x = -SPEED;
+        this.standing = false;
+        this.players[this.socket.id].setVelocityX(-SPEED);
         //this.players[this.socket.id].anims.play(LEFT, true);
-        //this.socket.emit(KEY_PRESS, LEFT, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
+        this.socket.emit(KEY_PRESS, LEFT, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
     }
 
     right() {
-        //this.players[this.socket.id].body.velocity.x = SPEED;
+        this.standing = false;
+        this.players[this.socket.id].setVelocityX(SPEED);
         //this.players[this.socket.id].anims.play(RIGHT, true);
-        //this.socket.emit(KEY_PRESS, RIGHT, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
+        this.socket.emit(KEY_PRESS, RIGHT, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
     }
 
-    up() {
+    prone() {
         //this.players[this.socket.id].body.velocity.y = -SPEED;
         //this.players[this.socket.id].anims.play(UP, true);
         //this.socket.emit(KEY_PRESS, UP, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
     }
 
-    down() {
-        //this.players[this.socket.id].body.velocity.y = SPEED;
-        //this.players[this.socket.id].anims.play(DOWN, true);
-        //this.socket.emit(KEY_PRESS, DOWN, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
+    jump() {
+        // Player Jump Movement
+        console.log(this.onGround);
+        if (this.onGround) {
+            this.onGround = false;
+            this.standing = false;
+            this.players[this.socket.id].setVelocityY(-10);
+        }
+        // Player Jump Animation
+        if (this.onGround == false) {
+            this.standing = false;
+            //anim.playerJump(this, playerCharacter);
+        }
+        this.socket.emit(KEY_PRESS, JUMP, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
     }
 
     stop() {
-        //this.players[this.socket.id].body.velocity.x = 0;
-        //this.players[this.socket.id].body.velocity.y = 0;
-        //this.players[this.socket.id].anims.stop();
-        //this.socket.emit(STOP, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
+        this.players[this.socket.id].setVelocityX(0);
+        if (!this.standing) {
+            // play standing animation
+            this.standing = true;
+        }
+        this.socket.emit(STOP, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
     }
     
     registerChat() {

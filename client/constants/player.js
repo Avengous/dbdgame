@@ -1,5 +1,5 @@
 // Physics
-export const SPEED = 200;
+export const SPEED = 5;
 
 // Events
 export const NEW_PLAYER = 'newPlayer';
@@ -11,7 +11,8 @@ export const STOP = 'stop';
 export const REMOVE = 'remove';
 
 // Movement
-export const UP = 'up';
 export const LEFT = 'left';
-export const DOWN = 'down';
 export const RIGHT = 'right';
+export const CLIMB = 'climb';
+export const PRONE = 'prone';
+export const JUMP = 'jump';
