@@ -1,3 +1,5 @@
+// Deprecated
+
 import * as anim from './animation.js';
 import { setPlayerStats, Ability } from './player.js';
 import { Client } from './client.js';

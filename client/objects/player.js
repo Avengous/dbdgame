@@ -3,6 +3,7 @@ import * as Animation from '../animation';
 import { NEW_PLAYER, ALL_PLAYERS, CHAT, KEY_PRESS, MOVE, STOP, REMOVE } from '../constants/player';
 import { CLIMB, LEFT, PRONE, RIGHT, JUMP, SPEED } from '../constants/player';
 import { FADE_DURATION } from '../constants/config';
+import Ability from './ability';
 
 class Player {
     constructor(scene, room, position, data) {
@@ -141,6 +142,14 @@ class Player {
             this.standing = true;
         }
         this.socket.emit(STOP, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
+    }
+
+    proneStab() {
+        Animation.playerProneStab(this, this.sprite.spriteHeader);
+    }
+
+    basicAttack() {
+        new Ability(this).basicAttack();
     }
     
     registerChat() {

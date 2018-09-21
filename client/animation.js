@@ -105,7 +105,7 @@ export function playerProneStab(self, playerModel) {
     var animationKey = getAnimationKey(playerModel, KEY.PRONE_STAB);
     playAnimation(self, animationKey);
     ANIMATION_LOCK = true;
-    self.player.once('animationcomplete', function(){
+    self.players[self.socket.id].once('animationcomplete', function(){
         ANIMATION_LOCK = false;
     });
 };
@@ -154,7 +154,7 @@ export function playerShoot(self, playerModel, type = 1) {
     }
     var animationKey = getAnimationKey(playerModel, key);
     playAnimation(self, animationKey);
-    self.player.once('animationcomplete', function(){
+    self.players[self.socket.id].once('animationcomplete', function(){
         playerAlert(self, playerModel);
     });
 };
@@ -198,7 +198,7 @@ export function playerStab(self, playerModel, type = 1, twoHanded = false) {
     var animationKey = getAnimationKey(playerModel, key);
     playAnimation(self, animationKey);
     ANIMATION_LOCK = true;
-    self.player.once('animationcomplete', function(){
+    self.players[self.socket.id].once('animationcomplete', function(){
         ANIMATION_LOCK = false;
         playerAlert(self, playerModel);
     });
@@ -239,7 +239,7 @@ export function playerSwing(self, playerModel, type = 1, twoHanded = false) {
     }
     var animationKey = getAnimationKey(playerModel, key);
     playAnimation(self, animationKey);
-    self.player.once('animationcomplete', function(){
+    self.players[self.socket.id].once('animationcomplete', function(){
         playerAlert(self, playerModel);
     });
 };

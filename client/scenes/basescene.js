@@ -3,6 +3,7 @@ import Player from '../objects/player.js';
 //import { FADE_DURATION } from '../constants/config.js';
 //import { STOP } from '../../shared/constants/actions/player';
 //import TilesetAnimation from './tileset-animation';
+import { ANIMATION_LOCK } from '../animation';
 
 const { SPACE, LEFT, RIGHT, UP, DOWN, Q, W, E, R } = Phaser.Input.Keyboard.KeyCodes;
 
@@ -92,6 +93,15 @@ class BaseScene extends Phaser.Scene {
             if (this.cursors.down.isDown) {
                 this.player.prone();
             }
+
+            if (this.cursors.q.isDown && !ANIMATION_LOCK) {
+                if (this.cursors.down.isDown) {
+                    this.player.proneStab();
+                } else {
+                    this.player.basicAttack();
+                }
+            }
+
         }
     }
 

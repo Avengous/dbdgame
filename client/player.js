@@ -1,8 +1,9 @@
+// Deprecated
+
 import { playerCharacter } from './game.js';
 import { Minion } from './graphics.js';
 import * as Anim from './animation.js';
 
-// Deprecated
 function createPlayerStatUI(self, player) {
 	stats = player.stats;
 	info = player.info;

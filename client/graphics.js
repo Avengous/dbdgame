@@ -1,3 +1,5 @@
+// Deprecated
+
 import { WIDTH, HEIGHT } from './constants/config.js';
 import { player } from './game.js';
 

@@ -1,3 +1,5 @@
+// Deprecated
+
 import { Game } from './game.js';
 import { HealthBar } from './graphics.js';
 
