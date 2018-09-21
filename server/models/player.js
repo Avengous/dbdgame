@@ -37,6 +37,12 @@ class Player extends BaseModel {
             player.updatePosition(coor);
             socket.broadcast.to(socket.room).emit(STOP, player);
         });
+
+        socket.on('animationEvent', function(animationKey) {
+            player.animationKey = animationKey.key;
+            player.animationFlipX = animationKey.flipX;
+            socket.broadcast.emit('playerAnimationChangeEvent', player)
+        });
     }
 
     static onDisconnect(io, socket) {
@@ -49,6 +55,8 @@ class Player extends BaseModel {
     constructor(id, position, sprite) {
         super(id, position.x, position.y, sprite);
         this.direction = position.direction;
+        this.animationKey = null;
+        this.animationFlipX = false;
     }
 
     updatePosition(coor) {
