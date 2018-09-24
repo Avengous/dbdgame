@@ -28,8 +28,10 @@ var UIScene = new Phaser.Class({
             .lineStyle(2, 0xFFFFFF)
             .strokeRect(rect.x, rect.y, rect.width, rect.height);
 
-        var text = new Phaser.GameObjects.Text(this, 0, 0, "Spawn", FontStyle)
-            .setAlign('center');
+        var text = new Phaser.GameObjects.Text(this, 0, 0, "Spawn Monster", FontStyle)
+            .setAlign('center')
+            .setFontSize(10)
+            .setWordWrapWidth(50);
         text.setPadding((rect.width-text.width)/2, (rect.height-text.height)/2, 0, 0);
 
         container.add([graphics, text]);
