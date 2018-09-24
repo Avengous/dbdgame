@@ -1,5 +1,5 @@
-import { WIDTH } from '../constants/config.js';
-//import { Menu } from '../graphics.js';
+import { WIDTH, HEIGHT } from '../constants/config.js';
+import { FontStyle } from  '../constants/styles.js';
 
 var UIScene = new Phaser.Class({
 
@@ -12,24 +12,49 @@ var UIScene = new Phaser.Class({
         Phaser.Scene.call(this, { key: 'UIScene', active: false });
     },
 
-    create: function ()
-    {
-        //  Our Text object to display the Score
-        var info = this.add.text(10, 10, 'DBDGAMEDEV', { font: '36px Arial', fill: '#000000' });
+    create: function () {
+        this.add.text(10, 10, 'DBDGAMEDEV', { font: '36px Arial', fill: '#000000' });
 
-        //var menu = new Menu(this, WIDTH-30, 30);
+        // Eventually only want this available if Admin;
+        this.add.existing(this.addDummyButton());;
+    },
 
-        //  Grab a reference to the Game Scene
-        //var scene = this.scene.get('UIScene'); // Commenting this out until player object is created.
+    addDummyButton: function () {
+        var container = new Phaser.GameObjects.Container(this, WIDTH-55, 55);
+        var rect = new Phaser.Geom.Rectangle(0, 0, 50, 50);
+        var graphics = new Phaser.GameObjects.Graphics(this)
+            .fillStyle(0x000000)
+            .fillRectShape(rect)
+            .lineStyle(2, 0xFFFFFF)
+            .strokeRect(rect.x, rect.y, rect.width, rect.height);
 
-        //  Listen for events from it
-        /*ourGame.events.on('addScore', function () {
+        var text = new Phaser.GameObjects.Text(this, 0, 0, "Spawn", FontStyle)
+            .setAlign('center');
+        text.setPadding((rect.width-text.width)/2, (rect.height-text.height)/2, 0, 0);
 
-            this.score += 10;
+        container.add([graphics, text]);
+        container.setInteractive(rect, Phaser.Geom.Rectangle.Contains);
 
-            info.setText('Score: ' + this.score);
+        container.on('pointerover', () => {
+            text.setColor(0x44FF44);
+            graphics.clear()
+                .fillStyle(0x000000)
+                .fillRectShape(rect)
+                .lineStyle(2, 0x44FF44)
+                .strokeRect(rect.x, rect.y, rect.width, rect.height);
+        });
 
-        }, this);*/
+        container.on('pointerout', () => {
+            text.setColor(0xFFFFFF);
+            graphics.clear()
+                .fillStyle(0x000000)
+                .fillRectShape(rect)
+                .lineStyle(2, 0xFFFFFF)
+                .strokeRect(rect.x, rect.y, rect.width, rect.height);
+            
+        });
+
+        return container;
     }
 
 });
