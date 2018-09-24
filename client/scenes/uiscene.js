@@ -36,7 +36,7 @@ var UIScene = new Phaser.Class({
         container.setInteractive(rect, Phaser.Geom.Rectangle.Contains);
 
         container.on('pointerover', () => {
-            text.setColor(0x44FF44);
+            text.setColor('#44FF44');
             graphics.clear()
                 .fillStyle(0x000000)
                 .fillRectShape(rect)
@@ -45,13 +45,12 @@ var UIScene = new Phaser.Class({
         });
 
         container.on('pointerout', () => {
-            text.setColor(0xFFFFFF);
+            text.setColor('#FFFFFF');
             graphics.clear()
                 .fillStyle(0x000000)
                 .fillRectShape(rect)
                 .lineStyle(2, 0xFFFFFF)
                 .strokeRect(rect.x, rect.y, rect.width, rect.height);
-            
         });
 
         return container;
