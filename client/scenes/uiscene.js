@@ -20,7 +20,7 @@ var UIScene = new Phaser.Class({
     },
 
     addDummyButton: function () {
-        var container = new Phaser.GameObjects.Container(this, WIDTH-55, 55);
+        var container = new Phaser.GameObjects.Container(this, WIDTH-55, 5);
         var rect = new Phaser.Geom.Rectangle(0, 0, 50, 50);
         var graphics = new Phaser.GameObjects.Graphics(this)
             .fillStyle(0x000000)
