@@ -2,7 +2,7 @@
 //import { UP, LEFT, DOWN, RIGHT } from '../../shared/constants/directions';
 //import { TOWN } from '../../shared/constants/scenes';
 import { INIT, NEWCHAR } from '../constants/scenes.js';
-import * as anim from '../animation.js';
+import * as Animation from '../animation.js';
 
 const sprites = ["base","johnny","shock","stephen"];
 
@@ -51,8 +51,8 @@ class Init extends Phaser.Scene {
         */
 
         // Create player animations (from animations.js)
-        createSpriteAnimations(this, this.cache.json);
-        //Game.monster.createAnimations(this); // Need to fix this
+        this.createSpriteAnimations();
+        this.createMonsterAnimations();
     }
 
     createProgressBar() {
@@ -83,18 +83,32 @@ class Init extends Phaser.Scene {
             .fillStyle(color)
             .fillRectShape(this.progressRect);
     }
-}
 
-// Create animations for sprites from JSON in cache
-function createSpriteAnimations(self, json) {
-    for (var i=0; i < sprites.length; i++) {
-        var files = json.get(sprites[0])[sprites[i]]["files"];
-        var keys = [];
-        for (var k=0; k < files.length; k++) {
-            keys.push(files[k]["key"])
+    createSpriteAnimations() {
+        for (var i=0; i < sprites.length; i++) {
+            var files = this.cache.json.get(sprites[0])[sprites[i]]["files"];
+            var keys = [];
+            for (var k=0; k < files.length; k++) {
+                keys.push(files[k]["key"])
+            }
+            Animation.getFramesFromArray(this, keys.sort());
         }
-        anim.getFramesFromArray(self, keys.sort());
     }
-};
+
+    createMonsterAnimations() {
+        var monsterData = this.cache.json.get('monsterDataJson');
+        for (var monster in monsterData) {
+            var data = monsterData[monster];
+            for (var animation in data.animation) {
+                this.anims.create({
+                    key: 'monsterAnim_' + monster + '_' + animation,
+                    frames: this.anims.generateFrameNumbers('monsterSprite_' + monster, data.animation[animation].frames),
+                    frameRate: data.animation[animation].frameRate,
+                    repeat: data.animation[animation].repeat
+                });
+            }
+        }
+    }
+}
 
 export default Init;
