@@ -34,10 +34,8 @@ class Init extends Phaser.Scene {
     }
 
     create() {
-        /*
-            this.music = this.sound.add('music-town', { loop: true });
-            this.music.play();
-        */
+        this.music = this.sound.add('bgm', { loop: true });
+        this.music.play();
 
         // create player and monster animations
         this.createSpriteAnimations();

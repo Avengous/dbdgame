@@ -2,7 +2,7 @@ import { NEWCHAR } from '../constants/scenes.js';
 import { WIDTH, HEIGHT } from '../constants/config.js';
 import { UISCENE, ICYFIELD } from '../constants/scenes.js';
 import { CHARACTERS } from '../constants/sprites.js';
-import { FontStyle,  } from  '../constants/styles.js';
+import { FontStyle } from  '../constants/styles.js';
 import { STAND1, WALK1 } from '../constants/animation.js';
 import Player from '../objects/player.js';
 
@@ -21,8 +21,10 @@ var NewCharScene = new Phaser.Class({
     },
 
     create: function () {
-        let info = this.add.text(WIDTH/2, 20, 'Character Creation', { font: '36px Arial', fill: '#000000' });
-        info.setOrigin(0.5);
+        let info = this.add.text(WIDTH/2, 20, 'Character Select', FontStyle)
+            .setFontSize(36)
+            .setColor('#000000')
+            .setOrigin(0.5);
         var i = 15;
         for (var label in CHARACTERS) {
             var sprite = CHARACTERS[label].spriteHeader;
