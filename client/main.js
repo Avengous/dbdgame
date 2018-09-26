@@ -1,6 +1,5 @@
 import Phaser, { Game } from 'phaser';
 import { WIDTH, HEIGHT, DEFAULT_GRAVITY } from './constants/config.js';
-//import { Game } from './game.js';
 import Init from './scenes/init.js';
 import UIScene from './scenes/uiscene.js';
 import Icyfield from './scenes/icyfield.js';

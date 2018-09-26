@@ -1,5 +1,7 @@
-import { Game } from './game.js'
-import io from 'socket.io';
+// Deprecated
+
+//import { Game } from './game.js'
+import io from 'socket.io-client';
 
 export var Client = {};
 Client.socket = io.connect();
@@ -15,6 +17,6 @@ Client.createMonster = function(monsterId, x, y) {
 Client.socket.on('createdMonsterEvent', function(monsters) {
     for (var i in monsters) {
         var monster = monsters[i];
-        Game.monster.create(monster.id, monster.x, monster.y);
+        //Game.monster.create(monster.id, monster.x, monster.y);
     }
 })

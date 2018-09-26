@@ -1,17 +1,7 @@
-//import { Scene } from 'phaser';
-//import { UP, LEFT, DOWN, RIGHT } from '../../shared/constants/directions';
-//import { TOWN } from '../../shared/constants/scenes';
 import { INIT, NEWCHAR } from '../constants/scenes.js';
 import * as Animation from '../animation.js';
 
 const sprites = ["base","johnny","shock","stephen"];
-
-//import { MAP_TOWN, MAP_HOUSE_1, MAP_HOUSE_2, IMAGE_HOUSE, IMAGE_TOWN, IMAGE_PLAYER } from '../constants/assets';
-
-/*
-- Load all Tilemaps, Spritesheets
-- Generate all animations
-*/
 
 class Init extends Phaser.Scene {
     constructor() {
@@ -22,8 +12,7 @@ class Init extends Phaser.Scene {
     }
 
     init() {
-        //Game.monsterData = this.cache.json.get('monsterDataJson');
-        //Game.main = this;
+
     }
 
     preload() {
@@ -50,7 +39,7 @@ class Init extends Phaser.Scene {
             this.music.play();
         */
 
-        // Create player animations (from animations.js)
+        // create player and monster animations
         this.createSpriteAnimations();
         this.createMonsterAnimations();
     }

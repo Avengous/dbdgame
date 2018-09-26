@@ -1,5 +1,6 @@
 import { WIDTH, HEIGHT } from '../constants/config.js';
 import { FontStyle } from  '../constants/styles.js';
+import { Client } from '../client.js';
 
 var UIScene = new Phaser.Class({
 
@@ -54,6 +55,10 @@ var UIScene = new Phaser.Class({
                 .lineStyle(2, 0xFFFFFF)
                 .strokeRect(rect.x, rect.y, rect.width, rect.height);
         });
+
+        container.on('pointerup', () => {
+
+        })
 
         return container;
     }
