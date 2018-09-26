@@ -15,7 +15,7 @@ var config = {
     physics: {
     	default: 'matter',
         matter: {
-            debug: false,
+            debug: true,
             gravity: { y: DEFAULT_GRAVITY }
         }
 	},
@@ -26,14 +26,4 @@ var config = {
 
 const game = new Game(config);
 
-/*scene: [{-
-    init: Game.init,
-    preload: Game.preload,
-    create: Game.create,
-    update: Game.update,
-    pack: {
-        files: [
-            { type: 'json', key: 'monsterDataJson', url: 'assets/json/monsters.json' }
-        ]
-    }
-}, UIScene]*/
+game.currentBaseScene = null;

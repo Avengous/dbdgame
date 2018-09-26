@@ -1,22 +1,26 @@
 import io from 'socket.io-client';
+import { JSON_MONSTER_DATA, HEADER_MONSTER_SPRITE } from '../constants/keys';
 
-class BaseMonster {
-    constructor(scene, room, position, data) {
+export class Monster {
+    constructor(scene, room, position, id) {
+        this.id = id.toString();
         this.scene = scene;
         this.room = room;
         this.position = position;
         this.socket = io();
-        this.sprite = data.sprite;
+        this.data = this.scene.cache.json.get(JSON_MONSTER_DATA)[this.id];
     }
 
     create() {
         // Add Monster to Server
         //this.socket.emit(NEW_PLAYER, this.room, this.position, this.sprite);
-
+        this.add();
         // Add Monster to Client
         /*this.socket.on(NEW_PLAYER, (data) => {
             this.addPlayer(data.id, data.x, data.y, data.sprite);
         });*/
+
+        //this.add('')
 
         // Play movement, animations and remove monsters from client
         /*this.socket.on(ALL_PLAYERS, (data) => {
@@ -41,16 +45,19 @@ class BaseMonster {
     }
 
 
-    add(id, x, y, sprite) {
-        /*
-        this.players[id] = this.scene.matter.add.sprite(
-            x, 
-            y,
-            sprite.spriteHeader + '_stand1_0', 
-            0, 
-            { 'inertia': 'Infinity', 'name': 'playerSprite' }
-        );
-        */
+    add() {
+        var monster = this.scene.matter.add.sprite(
+            this.position.x,
+            this.position.y,
+            HEADER_MONSTER_SPRITE + this.id,
+            0,
+            { 'inertia': 'Infinity', 'name': this.data.name });
+        monster.body.collisionFilter.group = -1;
+        monster.body.name = 'monsterBody';
+        monster.anims.play('monsterAnim_' + this.id + '_walk');
+        monster.hp = new HealthBar(this.scene, 0, 0);
+        monster.hp.setPosition(monster.x-(monster.width/2), monster.y-(monster.height*0.7));
+        //Game.monster.current.push(monster);
     }
     
 }
@@ -108,10 +115,10 @@ class HealthBar {
 
 }
 
-class TrainingDummy extends BaseMonster {
+class TrainingDummy extends Monster {
 
-    constructor() {
-        
+    constructor(scene, room, position) {
+        super({ scene, room, position });
     }
 
 }

@@ -1,8 +1,6 @@
-//import { Scene } from 'phaser';
 import Player from '../objects/player.js';
 //import { FADE_DURATION } from '../constants/config.js';
 //import { STOP } from '../../shared/constants/actions/player';
-//import TilesetAnimation from './tileset-animation';
 import { ANIMATION_LOCK } from '../animation';
 
 const { SPACE, LEFT, RIGHT, UP, DOWN, Q, W, E, R } = Phaser.Input.Keyboard.KeyCodes;
@@ -22,6 +20,8 @@ class BaseScene extends Phaser.Scene {
         this.nextSceneKey = null;
         this.transition = true;
         this.input.keyboard.removeAllListeners();
+        this.scene.get();
+        this.game.currentBaseScene = this;
     }
 
     create(tilemap, tileset, withTSAnimation) {

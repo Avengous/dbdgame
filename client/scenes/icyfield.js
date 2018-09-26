@@ -20,10 +20,13 @@ class Icyfield extends BaseScene {
 
         // Let everything collide with ground layer.
         this.layers[0].setCollisionByExclusion([-1]);
-        this.layers[0].setCollisionByProperty({ collides: true });
+
+        // This uses the tile property set in Tiled to determine collision.
+        //this.layers[0].setCollisionByProperty({ collides: true });
+
         this.matter.world.setBounds(0, 0, this.layers[0].width, this.layers[0].height);
 
-        // Name key lets us easily find a specific layer to detect collisions against
+        // Name key lets us easily find a specific layer to detect collisions against. Must set collision before this.
         this.matter.world.convertTilemapLayer(this.layers[0], {'name': 'groundLayer'});
     }
 

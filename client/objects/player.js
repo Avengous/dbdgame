@@ -119,14 +119,14 @@ class Player {
         this.standing = false;
         this.players[this.socket.id].setVelocityX(-SPEED);
         Animation.playerWalkLeft(this, this.sprite.spriteHeader);
-        this.socket.emit(KEY_PRESS, LEFT, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
+        this.socket.emit(KEY_PRESS, LEFT, this.getPosition());
     }
 
     right() {
         this.standing = false;
         this.players[this.socket.id].setVelocityX(SPEED);
         Animation.playerWalkRight(this, this.sprite.spriteHeader);
-        this.socket.emit(KEY_PRESS, RIGHT, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
+        this.socket.emit(KEY_PRESS, RIGHT, this.getPosition());
     }
 
     prone() {
@@ -148,7 +148,7 @@ class Player {
             this.standing = false;
             Animation.playerJump(this, this.sprite.spriteHeader);
         }
-        this.socket.emit(KEY_PRESS, JUMP, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
+        this.socket.emit(KEY_PRESS, JUMP, this.getPosition());
     }
 
     stop() {
@@ -157,7 +157,7 @@ class Player {
             Animation.playerStand(this, this.sprite.spriteHeader);
             this.standing = true;
         }
-        this.socket.emit(STOP, { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y });
+        this.socket.emit(STOP, this.getPosition());
     }
 
     proneStab() {
@@ -186,6 +186,10 @@ class Player {
             messages.scrollTo(0, messages.scrollHeight);
         });
         */
+    }
+
+    getPosition() {
+        return { x: this.players[this.socket.id].x, y: this.players[this.socket.id].y };
     }
 }
 

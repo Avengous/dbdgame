@@ -1,6 +1,8 @@
-import { WIDTH, HEIGHT } from '../constants/config.js';
-import { FontStyle } from  '../constants/styles.js';
-import { Client } from '../client.js';
+import { UISCENE } from '../constants/scenes';
+import { WIDTH, HEIGHT } from '../constants/config';
+import { FontStyle } from  '../constants/styles';
+import { Monster } from '../objects/monster';
+import { TRAINING_DUMMY } from '../constants/monsters';
 
 var UIScene = new Phaser.Class({
 
@@ -10,14 +12,14 @@ var UIScene = new Phaser.Class({
 
     function UIScene ()
     {
-        Phaser.Scene.call(this, { key: 'UIScene', active: false });
+        Phaser.Scene.call(this, { key: UISCENE, active: false });
     },
 
     create: function () {
         this.add.text(10, 10, 'DBDGAMEDEV', { font: '36px Arial', fill: '#000000' });
 
         // Eventually only want this available if Admin;
-        this.add.existing(this.addDummyButton());;
+        this.add.existing(this.addDummyButton());
     },
 
     addDummyButton: function () {
@@ -57,7 +59,12 @@ var UIScene = new Phaser.Class({
         });
 
         container.on('pointerup', () => {
-
+            new Monster(
+                this.game.currentBaseScene,
+                this.game.currentBaseScene.key,
+                this.game.currentBaseScene.player.getPosition(),
+                TRAINING_DUMMY)
+            .create();
         })
 
         return container;

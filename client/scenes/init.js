@@ -25,7 +25,7 @@ class Init extends Phaser.Scene {
 
         this.load.tilemapTiledJSON('map', 'assets/json/icyfield.json');
         this.load.image('floor', 'assets/world/icyfield.png');
-
+        this.load.json('monsterDataJson', 'assets/json/monsters.json');
         this.load.audio('bgm', ['assets/sfx/bgm.m4a']);
 
         this.load.on('progress', this.onLoadProgress, this);
