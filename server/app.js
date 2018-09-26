@@ -4,6 +4,7 @@ import path from 'path';
 import http from 'http';
 import socket from 'socket.io';
 import Player from './models/player';
+import Monster from './models/monster';
 
 const app = express();
 const server = http.Server(app);

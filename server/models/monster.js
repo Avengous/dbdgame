@@ -4,6 +4,12 @@ import { ICYFIELD } from '../../client/constants/scenes.js';
 
 class Monster extends BaseModel {
 
+    /* 
+        - Monster updates are sent from server to client. (creating, moving, attacking, etc)
+        - Monster create events will broadcast to all players to create monster client side.
+        - Monster data is stored server side so when a player moves into a new zone, it can create the monsters pre-existing in that zone.
+    */
+
     static onConnect(io, socket) {
         let monster;
         /*
