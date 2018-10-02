@@ -1,5 +1,5 @@
 import BaseModel from './basemodel.js';
-//import { NEW_MONSTER, MOVE, STOP, REMOVE } from '../../client/constants/monster.js';
+import { NEW_MONSTER, ALL_MONSTERS, MOVE, STOP, REMOVE } from '../../client/constants/monster.js';
 import { ICYFIELD } from '../../client/constants/scenes.js';
 
 class Monster extends BaseModel {
@@ -29,6 +29,11 @@ class Monster extends BaseModel {
             socket.emit(ALL_MONSTERS, monsters);
 
             socket.broadcast.to(room).emit(NEW_MONSTER, monster);
+        });
+
+        socket.on(MOVE, (direction, coor) => {
+            player.update(direction, coor);
+            socket.broadcast.to(socket.room).emit(MOVE, player);
         });
 
         socket.on(STOP, (coor) => {
