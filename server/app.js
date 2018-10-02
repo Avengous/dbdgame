@@ -20,6 +20,7 @@ server.listen(port, () => {
 
 io.on('connection', function (socket) {
     Player.onConnect(io, socket);
+    Monster.onConnect(io, socket);
 
     socket.on('disconnect', function () {
         Player.onDisconnect(io, socket);

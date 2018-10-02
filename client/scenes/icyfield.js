@@ -1,6 +1,8 @@
 import BaseScene from './basescene.js';
 import { MAP_ICYFIELD, IMAGE_ICYFIELD } from '../constants/maps.js';
 import { ICYFIELD } from '../constants/scenes.js';
+import { Monster } from '../objects/monster';
+import { TRAINING_DUMMY } from '../constants/monsters';
 
 class Icyfield extends BaseScene {
     constructor() {
@@ -28,6 +30,14 @@ class Icyfield extends BaseScene {
 
         // Name key lets us easily find a specific layer to detect collisions against. Must set collision before this.
         this.matter.world.convertTilemapLayer(this.layers[0], {'name': 'groundLayer'});
+
+        // Workaround. Need to start server listener to let first mob spawn.
+        new Monster(
+            this.game.currentBaseScene,
+            this.game.currentBaseScene.key,
+            this.getPosition(),
+            TRAINING_DUMMY)
+        .create();
     }
 
     getPosition() {

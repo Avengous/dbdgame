@@ -1,8 +1,8 @@
-import BaseModel from './basemodel.js';
-import { NEW_MONSTER, ALL_MONSTERS, MOVE, STOP, REMOVE } from '../../client/constants/monster.js';
-import { ICYFIELD } from '../../client/constants/scenes.js';
+import { BaseMonsterModel } from './basemodel';
+import { NEW_MONSTER, ALL_MONSTERS, MOVE, STOP, REMOVE } from '../../client/constants/monsters';
+import { ICYFIELD } from '../../client/constants/scenes';
 
-class Monster extends BaseModel {
+class Monster extends BaseMonsterModel {
 
     /* 
         - Monster updates are sent from server to client. (creating, moving, attacking, etc)
@@ -12,12 +12,12 @@ class Monster extends BaseModel {
 
     static onConnect(io, socket) {
         let monster;
-        /*
-        socket.on(NEW_MONSTER, (room, position, sprite) => {
+        
+        socket.on(NEW_MONSTER, (room, position, id, data) => {
             socket.join(room);
             socket.room = room;
 
-            monster = new Monster(socket.id, position, sprite);
+            monster = new Monster(socket.id, position, id, data);
             Monster.list[room][socket.id] = monster;
 
             let monsters = [];
@@ -30,7 +30,7 @@ class Monster extends BaseModel {
 
             socket.broadcast.to(room).emit(NEW_MONSTER, monster);
         });
-
+        /*
         socket.on(MOVE, (direction, coor) => {
             player.update(direction, coor);
             socket.broadcast.to(socket.room).emit(MOVE, player);
@@ -51,10 +51,12 @@ class Monster extends BaseModel {
         io.to(socket.room).emit(REMOVE, socket.id);
     }
 
-    constructor(id, position, sprite) {
-        super(id, position.x, position.y, sprite);
+    constructor(id, position, monsterId, data) {
+        super(id, position.x, position.y, monsterId, data);
+
+        // Direction is not used since game is not top-down.
         this.direction = position.direction;
-        this.animationKey = null;
+
         this.animationFlipX = false;
     }
 

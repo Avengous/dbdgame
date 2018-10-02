@@ -1,5 +1,6 @@
 import io from 'socket.io-client';
 import { JSON_MONSTER_DATA, HEADER_MONSTER_SPRITE } from '../constants/keys';
+import { NEW_MONSTER, ALL_MONSTERS, MOVE, STOP, REMOVE } from '../constants/monsters';
 
 export class Monster {
     constructor(scene, room, position, id) {
@@ -13,14 +14,13 @@ export class Monster {
 
     create() {
         // Add Monster to Server
-        //this.socket.emit(NEW_PLAYER, this.room, this.position, this.sprite);
-        this.add();
+        this.socket.emit(NEW_MONSTER, this.room, this.position, this.id, this.data);
+        
         // Add Monster to Client
-        /*this.socket.on(NEW_PLAYER, (data) => {
-            this.addPlayer(data.id, data.x, data.y, data.sprite);
-        });*/
-
-        //this.add('')
+        this.socket.once(NEW_MONSTER, (data) => {
+            console.log(data);
+            this.add(data); // Do I need to add parameters to add?
+        });
 
         // Play movement, animations and remove monsters from client
         /*this.socket.on(ALL_PLAYERS, (data) => {
@@ -45,16 +45,16 @@ export class Monster {
     }
 
 
-    add() {
+    add(data) {
         var monster = this.scene.matter.add.sprite(
-            this.position.x,
-            this.position.y,
-            HEADER_MONSTER_SPRITE + this.id,
+            data.x,
+            data.y,
+            HEADER_MONSTER_SPRITE + data.monsterId,
             0,
-            { 'inertia': 'Infinity', 'name': this.data.name });
+            { 'inertia': 'Infinity', 'name': data.data.name });
         monster.body.collisionFilter.group = -1;
         monster.body.name = 'monsterBody';
-        monster.anims.play('monsterAnim_' + this.id + '_walk');
+        monster.anims.play('monsterAnim_' + data.monsterId + '_walk');
         monster.hp = new HealthBar(this.scene, 0, 0);
         monster.hp.setPosition(monster.x-(monster.width/2), monster.y-(monster.height*0.7));
         //Game.monster.current.push(monster);
