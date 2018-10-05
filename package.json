@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "mkdir dist && cp -r assets dist/assets/ && node ."
+    "start": "rm -r dist && mkdir dist && cp -r assets dist/assets/ && node ."
   },
   "repository": {
     "type": "git",
