@@ -58,17 +58,13 @@ class Player {
             // Listens for player animation change events.
             this.socket.on('playerAnimationChangeEvent', (playerInfo) => {
                 for (var player in this.players) {
-                    console.log(player);
-                };
-                /*for (var i=0; i < this.players.length; i++) {
-                    var otherPlayer = self.otherPlayers[i];
-                    if (otherPlayer.playerId === playerInfo.playerId) {
-                        if (playerInfo.animationFlipX != null) {
-                            otherPlayer.flipX = playerInfo.animationFlipX;
+                    if (player === playerInfo[player].id) {
+                        if (playerInfo[player].animationFlipX != null) {
+                            this.players[player].flipX = playerInfo[player].animationFlipX;
                         };
-                        otherPlayer.anims.play(playerInfo.animationKey, true);
-                    };
-                };*/
+                        this.players[player].anims.play(playerInfo[player].animationKey, true);
+                    }
+                };
             });
 
             this.scene.matter.world.on('collisionstart', function (event, player) {

@@ -4,12 +4,6 @@ import { ICYFIELD } from '../../client/constants/scenes';
 
 class Monster extends BaseMonsterModel {
 
-    /* 
-        - Monster updates are sent from server to client. (creating, moving, attacking, etc)
-        - Monster create events will broadcast to all players to create monster client side.
-        - Monster data is stored server side so when a player moves into a new zone, it can create the monsters pre-existing in that zone.
-    */
-
     static onConnect(io, socket) {
         let monster;
         
@@ -30,17 +24,23 @@ class Monster extends BaseMonsterModel {
 
             socket.broadcast.to(room).emit(NEW_MONSTER, monster);
         });
-        /*
+        
         socket.on(MOVE, (direction, coor) => {
-            player.update(direction, coor);
-            socket.broadcast.to(socket.room).emit(MOVE, player);
+            if (monster) {
+                monster.update(direction, coor);
+                socket.broadcast.to(socket.room).emit(MOVE, monster);
+            }
         });
 
         socket.on(STOP, (coor) => {
             monster.updatePosition(coor);
             socket.broadcast.to(socket.room).emit(STOP, monster);
         });
-        */
+
+        socket.on(REMOVE, () => {
+            io.to(socket.room).emit(REMOVE, monster);
+        });
+        
 
     }
 
@@ -53,10 +53,7 @@ class Monster extends BaseMonsterModel {
 
     constructor(id, position, monsterId, data) {
         super(id, position.x, position.y, monsterId, data);
-
-        // Direction is not used since game is not top-down.
         this.direction = position.direction;
-
         this.animationFlipX = false;
     }
 
@@ -68,6 +65,14 @@ class Monster extends BaseMonsterModel {
     update(direction, coor) {
         this.updatePosition(coor);
         this.direction = direction;
+    }
+
+    static sendMonsterList(socket) {
+        socket.on(ALL_MONSTERS, () => {
+            socket.emit(ALL_MONSTERS, Monster.list);
+        });
+
+        socket.emit(ALL_MONSTERS, Monster.list);
     }
 }
 

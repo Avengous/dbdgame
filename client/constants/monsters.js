@@ -7,3 +7,11 @@ export const REMOVE = 'removeMonsterEvent';
 
 // Monsters 
 export const TRAINING_DUMMY = 0;
+
+// Movement
+export const LEFT = 'left';
+export const RIGHT = 'right';
+export const JUMP = 'jump';
+
+// Physics
+export const SPEED = 1.5;

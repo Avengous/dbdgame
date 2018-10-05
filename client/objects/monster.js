@@ -1,6 +1,8 @@
 import io from 'socket.io-client';
 import { JSON_MONSTER_DATA, HEADER_MONSTER_SPRITE } from '../constants/keys';
 import { NEW_MONSTER, ALL_MONSTERS, MOVE, STOP, REMOVE } from '../constants/monsters';
+import { LEFT, RIGHT, JUMP, SPEED } from '../constants/monsters';
+import { randomInt } from '../../utilities/math.js';
 
 export class Monster {
     constructor(scene, room, position, id) {
@@ -10,6 +12,9 @@ export class Monster {
         this.position = position;
         this.socket = io();
         this.data = this.scene.cache.json.get(JSON_MONSTER_DATA)[this.id];
+        this.monsters = {};
+        this.eventCnt = 0;
+        this.eventCur;
     }
 
     create() {
@@ -18,34 +23,59 @@ export class Monster {
         
         // Add Monster to Client
         this.socket.once(NEW_MONSTER, (data) => {
-            console.log(data);
-            this.add(data); // Do I need to add parameters to add?
+            this.add(data);
         });
 
         // Play movement, animations and remove monsters from client
-        /*this.socket.on(ALL_PLAYERS, (data) => {
+
+        /*
+            Instead of creating this listener on monster creation... it really needs to be on the scene creation.
+        */
+
+        this.socket.on(ALL_MONSTERS, (data) => {
+
+            for (let i = 0; i < data.length; i++) {
+                this.add(data[i]);
+            }
 
             this.socket.on(MOVE, (data) => {
-                this.players[data.id].x = data.x;
-                this.players[data.id].y = data.y;
-                this.players[data.id].anims.play(data.direction, true);
+                console.log(this.monsters);
+                switch(data.direction) {
+                    case LEFT:
+                        this.monsters[data.id].setVelocityX(-SPEED);
+                        this.monsters[data.id].flipX = false;
+                        this.monsters[data.id].anims.play('monsterAnim_' + data.monsterId + '_walk');
+                        break;
+                    case RIGHT:
+                        this.monsters[data.id].setVelocityX(SPEED);
+                        this.monsters[data.id].flipX = true;
+                        this.monsters[data.id].anims.play('monsterAnim_' + data.monsterId + '_walk');
+                        break;
+                }
             });
 
             this.socket.on(STOP, (data) => {
-                this.players[data.id].x = data.x;
-                this.players[data.id].y = data.y;
-                this.players[data.id].anims.stop();
+                this.monsters[data.id].setVelocityX(0);
+                this.monsters[data.id].anims.play('monsterAnim_' + data.monsterId + '_stand');
             });
 
-            this.socket.on(REMOVE, (id) => {
-                this.players[id].destroy();
-                delete this.players[id];
+            this.socket.on(REMOVE, (data) => {
+                // Need to figure out how to kill a monster...
+                //console.log('Remove Event', this.monsters[data.id])
+                this.monsters[data.id].hp = 0;
+                this.monsters[data.id].setActive(false);
+                this.monsters[data.id].setVisible(false);
+                delete this.monsters[data.id];
             });
-        });*/
+        });
     }
 
 
     add(data) {
+        if (this.monsters == undefined) 
+            console.log('found und')
+            this.monsters = {};
+
         var monster = this.scene.matter.add.sprite(
             data.x,
             data.y,
@@ -54,10 +84,57 @@ export class Monster {
             { 'inertia': 'Infinity', 'name': data.data.name });
         monster.body.collisionFilter.group = -1;
         monster.body.name = 'monsterBody';
-        monster.anims.play('monsterAnim_' + data.monsterId + '_walk');
+        monster.anims.play('monsterAnim_' + data.monsterId + '_stand');
         monster.hp = new HealthBar(this.scene, 0, 0);
         monster.hp.setPosition(monster.x-(monster.width/2), monster.y-(monster.height*0.7));
-        //Game.monster.current.push(monster);
+        monster.monsterId = data.id;
+        this.monsters[data.id] = monster;
+        this.scene.time.addEvent({ delay: 100, callback: this.randomEvent, callbackScope: this, loop: true, args: [this.monsters[data.id]] });
+    }
+
+    update(monster) {
+        monster.hp.setPosition(monster.x-(monster.width/2), monster.y-(monster.height*0.7));
+    }
+
+    left(monster) {
+        this.socket.emit(MOVE, LEFT, monster);
+    }
+
+    right(monster) {
+        this.socket.emit(MOVE, RIGHT, monster);
+    }
+
+    stop(monster) {
+        this.socket.emit(STOP, monster);
+    }
+
+    randomEvent(monster) {
+        if (this.eventCnt == 10) {
+            this.eventCnt = 0;
+            this.eventCur = randomInt(0, 3);
+        }
+
+        switch(this.eventCur) {
+            case 0:
+                this.stop(monster);
+                break;
+            case 1:
+                this.left(monster);
+                break;
+            case 2:
+                this.right(monster);
+                break;
+        }
+
+        this.eventCnt++;
+    }
+
+    getPosition(monster) {
+        return { x: monster.x, y: monster.y };
+    }
+
+    destroy(monster) {
+        this.socket.emit(REMOVE, monster);
     }
     
 }
@@ -111,14 +188,6 @@ class HealthBar {
         this.x = x;
         this.y = y;
         this.draw();
-    }
-
-}
-
-class TrainingDummy extends Monster {
-
-    constructor(scene, room, position) {
-        super({ scene, room, position });
     }
 
 }

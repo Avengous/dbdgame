@@ -1,6 +1,7 @@
-import BaseModel from './basemodel.js';
-import { NEW_PLAYER, ALL_PLAYERS, CHAT, KEY_PRESS, MOVE, STOP, REMOVE } from '../../client/constants/player.js';
-import { ICYFIELD } from '../../client/constants/scenes.js';
+import BaseModel from './basemodel';
+import Monster from './monster';
+import { NEW_PLAYER, ALL_PLAYERS, CHAT, KEY_PRESS, MOVE, STOP, REMOVE } from '../../client/constants/player';
+import { ICYFIELD } from '../../client/constants/scenes';
 
 class Player extends BaseModel {
     static onConnect(io, socket) {
@@ -20,6 +21,7 @@ class Player extends BaseModel {
             }
 
             socket.emit(ALL_PLAYERS, players);
+            Monster.sendMonsterList(socket);
 
             socket.broadcast.to(room).emit(NEW_PLAYER, player);
         });
@@ -38,10 +40,11 @@ class Player extends BaseModel {
             socket.broadcast.to(socket.room).emit(STOP, player);
         });
 
-        socket.on('animationEvent', function(animationKey) {
+        socket.on('animationEvent', function(animationKey, room) {
+            console.log(Player.list, socket.id)
             player.animationKey = animationKey.key;
             player.animationFlipX = animationKey.flipX;
-            socket.broadcast.emit('playerAnimationChangeEvent', player)
+            socket.broadcast.emit('playerAnimationChangeEvent', Player.list[room])
         });
     }
 

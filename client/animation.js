@@ -78,7 +78,7 @@ function playAnimation(self, animationKey, flipX = null) {
         self.players[self.socket.id].flipX = false;
     }
     self.players[self.socket.id].anims.play(animationKey, true);
-    self.socket.emit('animationEvent', { key: animationKey, flipX: flipX });
+    self.socket.emit('animationEvent', { key: animationKey, flipX: flipX }, self.room);
 };
 
 export function playerAlert(self, playerModel) {

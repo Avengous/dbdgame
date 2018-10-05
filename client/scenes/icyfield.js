@@ -32,12 +32,14 @@ class Icyfield extends BaseScene {
         this.matter.world.convertTilemapLayer(this.layers[0], {'name': 'groundLayer'});
 
         // Workaround. Need to start server listener to let first mob spawn.
-        new Monster(
+        var m = new Monster(
             this.game.currentBaseScene,
             this.game.currentBaseScene.key,
-            this.getPosition(),
-            TRAINING_DUMMY)
-        .create();
+            { x: 200, y: 150 },
+            TRAINING_DUMMY);
+        m.create();
+        m.destroy();
+        console.log(this);
     }
 
     getPosition() {

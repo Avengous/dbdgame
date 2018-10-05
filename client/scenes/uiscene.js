@@ -58,14 +58,14 @@ var UIScene = new Phaser.Class({
                 .strokeRect(rect.x, rect.y, rect.width, rect.height);
         });
 
-        container.on('pointerup', () => {
+        /*container.on('pointerup', () => {
             new Monster(
                 this.game.currentBaseScene,
                 this.game.currentBaseScene.key,
                 this.game.currentBaseScene.player.getPosition(),
                 TRAINING_DUMMY)
             .create();
-        })
+        })*/
 
         return container;
     }

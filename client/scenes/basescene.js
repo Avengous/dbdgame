@@ -2,6 +2,10 @@ import Player from '../objects/player.js';
 //import { FADE_DURATION } from '../constants/config.js';
 //import { STOP } from '../../shared/constants/actions/player';
 import { ANIMATION_LOCK } from '../animation';
+import { ALL_MONSTERS, MOVE, STOP, REMOVE } from '../constants/monsters';
+import { Monster } from '../objects/monster';
+import io from 'socket.io-client';
+//import { LEFT, RIGHT, JUMP, SPEED } from '../constants/monsters';
 
 const { SPACE, LEFT, RIGHT, UP, DOWN, Q, W, E, R } = Phaser.Input.Keyboard.KeyCodes;
 
@@ -22,6 +26,7 @@ class BaseScene extends Phaser.Scene {
         this.input.keyboard.removeAllListeners();
         this.scene.get();
         this.game.currentBaseScene = this;
+        this.socket = io();
     }
 
     create(tilemap, tileset, withTSAnimation) {
@@ -73,6 +78,9 @@ class BaseScene extends Phaser.Scene {
         });
 
         this.cameras.main.on('camerafadeoutcomplete', this.changeScene.bind(this));
+
+        // This isn't working... need to mess around with potential solutions some more.
+        //this.registerMonsters();
     }
 
     update() {
@@ -137,6 +145,44 @@ class BaseScene extends Phaser.Scene {
         this.hold(document.getElementById('right'), this.player.right.bind(this.player));
         */
     }
+
+    /*
+    registerMonsters() {
+        //this.socket.emit(ALL_MONSTERS);
+        this.socket.on(ALL_MONSTERS, (data) => {
+            console.log('Client - ALL_MONSTERS - BASE');
+
+            for (let i = 0; i < data.length; i++) {
+                Monster.add(data[i]);
+            }
+
+            this.socket.on(MOVE, (data) => {
+                switch(data.direction) {
+                    case LEFT:
+                        Monster.monsters[data.id].setVelocityX(-SPEED);
+                        Monster.monsters[data.id].flipX = false;
+                        Monster.monsters[data.id].anims.play('monsterAnim_' + data.monsterId + '_walk');
+                        break;
+                    case RIGHT:
+                        Monster.monsters[data.id].setVelocityX(SPEED);
+                        Monster.monsters[data.id].flipX = true;
+                        Monster.monsters[data.id].anims.play('monsterAnim_' + data.monsterId + '_walk');
+                        break;
+                }
+            });
+
+            this.socket.on(STOP, (data) => {
+                Monster.monsters[data.id].setVelocityX(0);
+                Monster.monsters[data.id].anims.play('monsterAnim_' + data.monsterId + '_stand');
+            });
+
+            this.socket.on(REMOVE, (id) => {
+                //this.players[id].destroy();
+                //delete this.players[id];
+            });
+        });
+    }
+    */
 
     hold(btn, action) {
         let t;
